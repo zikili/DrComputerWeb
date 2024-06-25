@@ -11,15 +11,15 @@ class BaseController<ModelInterface>{
     async get(req: Request, res: Response) {
         try {
             if (req.params.id != null) {
-                const students = await this.model.findById(req.params.id);
-                return res.status(200).send(students);
+                const users = await this.model.findById(req.params.id);
+                return res.status(200).send(users);
             } else {
                 if (req.query.name != null) {
-                    const students = await this.model.find({ name: req.query.name });
-                    return res.status(200).send(students);
+                    const users = await this.model.find({ name: req.query.name });
+                    return res.status(200).send(users);
                 } else {
-                    const students = await this.model.find();
-                    return res.status(200).send(students);
+                    const users = await this.model.find();
+                    return res.status(200).send(users);
                 }
             }
         } catch (err) {
@@ -28,24 +28,24 @@ class BaseController<ModelInterface>{
     }
 
     async post(req: Request, res: Response) {
-        const student = req.body;
+        const user = req.body;
         try {
-            const newStudent = await this.model.create(student);
-            res.status(201).json(newStudent);
+            const newUser = await this.model.create(user);
+            res.status(201).json(newUser);
         } catch (err) {
             res.status(500).send(err.message);
         }
     }
 
     async put(req: Request, res: Response) {
-        const student = req.body;
+        const user = req.body;
         try {
-            const updatedStudent = await this.model.findByIdAndUpdate(
-                student._id,
-                student,
+            const updatedUser = await this.model.findByIdAndUpdate(
+                user._id,
+                user,
                 { new: true }
             );
-            res.status(200).json(updatedStudent);
+            res.status(200).json(updatedUser);
         } catch (err) {
             res.status(500).send(err.message);
         }
