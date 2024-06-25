@@ -1,0 +1,6 @@
+backend/.env
+/backend/.env
+/frontend\package-lock.json
+/backend/coverage
+/backend/dist
+/backend/node_modules

@@ -1,0 +1,39 @@
+###
+
+GET http://localhost:3000/student
+
+###
+
+GET http://localhost:3000/student?name=jhon
+
+###
+
+GET http://localhost:3000/student/12347
+
+###
+
+POST http://localhost:3000/student Content-Type: application/json
+
+{
+"_id": "12347", "name": "John", "age": "20"
+}
+
+###
+
+PUT http://localhost:3000/student Content-Type: application/json
+
+{
+"_id": "12347", "name": "Moshe", "age": "22"
+}
+
+###
+
+DELETE http://localhost:3000/student Content-Type: application/json
+
+{
+"_id": "12346", "name": "Moshe", "age": "22"
+}
+
+###
+
+GET http://localhost:3000/post
