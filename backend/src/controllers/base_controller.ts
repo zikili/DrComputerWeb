@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 class BaseController<ModelInterface>{
     model: mongoose.Model<ModelInterface>;
 
-    constructor(model) {
+    constructor(model:mongoose.Model<ModelInterface>) {
         this.model = model;
     }
 
