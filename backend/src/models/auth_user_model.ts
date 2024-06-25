@@ -22,4 +22,4 @@ const AuthUserSchema = new mongoose.Schema<IAuthUser>({
   },
 });
 
-export default mongoose.model<IAuthUser>("User", AuthUserSchema);
+export default mongoose.model<IAuthUser>("AuthUser", AuthUserSchema);

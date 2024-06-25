@@ -7,8 +7,8 @@ import User from "../models/auth_user_model";
 
 const testStudent = {
   _id: "12345",
-  name: "John",
-  age: 20,
+  username: "John",
+  image: "image",
 };
 
 type TestUser = {
@@ -53,8 +53,8 @@ describe("Student Tests", () => {
       .set("Authorization", "Bearer " + user.accessToken)
       .send(testStudent);
     expect(res.statusCode).toEqual(201);
-    expect(res.body.name).toEqual(testStudent.name);
-    expect(res.body.age).toEqual(testStudent.age);
+    expect(res.body.username).toEqual(testStudent.username);
+    expect(res.body.image).toEqual(testStudent.image);
     expect(res.body._id).toEqual(testStudent._id);
   });
 
@@ -64,8 +64,8 @@ describe("Student Tests", () => {
       .get("/user/" + testStudent._id)
       .set("Authorization", "Bearer " + user.accessToken);
     expect(res.statusCode).toEqual(200);
-    expect(res.body.name).toEqual(testStudent.name);
-    expect(res.body.age).toEqual(testStudent.age);
+    expect(res.body.username).toEqual(testStudent.username);
+    expect(res.body.image).toEqual(testStudent.image);
     expect(res.body._id).toEqual(testStudent._id);
   });
 });

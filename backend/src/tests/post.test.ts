@@ -4,9 +4,11 @@ import mongoose from "mongoose";
 import Post from "../models/post_model";
 import User from "../models/auth_user_model";
 
+jest.setTimeout(20000);
 type TestUser = {
   email: string;
   password: string;
+  _id?: string;
   accessToken?: string;
 };
 
@@ -14,11 +16,20 @@ const user: TestUser = {
   email: "testStudent@test.com",
   password: "1234",
 };
-
+const comment={
+  userId:  user._id,
+  content:"Hello World"
+}
 const testPost1 = {
-  title: "John",
-  message: "Lohn",
-  owner: "Gohn",
+  owner: user._id,
+  type: "gaming",
+  gpu: "ryzen5000",
+  cpu: "i7",
+  motherboard:"asus",
+  memory:"hdd1024gb",
+  ram:"16gb",
+  image:"image",
+  comments:[comment]
 };
 
 let app;
@@ -27,9 +38,12 @@ beforeAll(async () => {
   console.log("Before all");
   await Post.deleteMany();
   await User.deleteMany({ email: user.email });
-  await request(app).post("/auth/register").send(user);
-  const res = await request(app).post("/auth/login").send(user);
-  user.accessToken = res.body.accessToken;
+  const res1=await request(app).post("/auth/register").send(user);
+  user._id = res1.body._id;
+  testPost1.owner=user._id;
+  comment.userId=user._id;
+  const res2 = await request(app).post("/auth/login").send(user);
+  user.accessToken = res2.body.accessToken;
 });
 
 afterAll(async () => {
@@ -52,6 +66,16 @@ test("Test post post", async () => {
     .send(testPost1)
     .set("Authorization", "Bearer " + user.accessToken);
   expect(res.statusCode).toEqual(201);
-  expect(res.body.title).toEqual(testPost1.title);
-  expect(res.body.message).toEqual(testPost1.message);
+  expect(res.body).toHaveProperty("_id");
+  expect(user._id).toEqual(testPost1.owner);
+  expect(res.body.type).toEqual(testPost1.type);
+  expect(res.body.gpu).toEqual(testPost1.gpu);
+  expect(res.body.cpu).toEqual(testPost1.cpu);
+  expect(res.body.motherboard).toEqual(testPost1.motherboard);
+  expect(res.body.memory).toEqual(testPost1.memory);
+  expect(res.body.ram).toEqual(testPost1.ram);
+  expect(res.body.image).toEqual(testPost1.image);
+  expect(res.body.comments[0].userId).toEqual(testPost1.comments[0].userId);
+  expect(res.body.comments[0].content).toEqual(testPost1.comments[0].content);
+  
 });
