@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 export interface IUser {
   _id: string;
-  name: string;
-  age: number;
+  username: string;
+  image: string;
 }
 
 const UserSchema = new mongoose.Schema<IUser>({
@@ -11,14 +11,14 @@ const UserSchema = new mongoose.Schema<IUser>({
     type: String,
     required: true,
   },
-  name: {
+  username: {
     type: String,
     required: true,
   },
-  age: {
-    type: Number,
+  image: {
+    type: String,
     required: true,
   },
 });
 
-export default mongoose.model<IUser>("Student", UserSchema);
+export default mongoose.model<IUser>("User", UserSchema);

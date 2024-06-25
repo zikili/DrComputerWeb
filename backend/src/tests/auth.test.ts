@@ -10,6 +10,7 @@ type TestUser = {
   password: string;
   accessToken?: string;
   refreshToken?: string;
+  _id?:string;
 };
 
 const user: TestUser = {
@@ -41,6 +42,7 @@ describe("Register Tests", () => {
     expect(res.body).toHaveProperty("refreshToken");
     user.accessToken = res.body.accessToken;
     user.refreshToken = res.body.refreshToken;
+    user._id = res.body._id;
   });
 
   test("Middleware", async () => {
@@ -57,9 +59,14 @@ describe("Register Tests", () => {
       .post("/post")
       .set("Authorization", "Bearer " + user.accessToken)
       .send({
-        title: "Post Title",
-        message: "Post Content",
-        owner: "12345",
+        type: "gaming",
+        gpu: "ryzen5000",
+        cpu: "i7",
+        motherboard:"asus",
+        memory:"hdd1024gb",
+        ram:"16gb",
+        image:"image",
+        comments:[{userId: "667ab76aa71b33668351e9b3",content:"Hello World"}]
       });
     expect(res2.statusCode).toEqual(200);
   });
