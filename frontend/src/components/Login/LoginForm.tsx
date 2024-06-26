@@ -34,7 +34,6 @@ function LoginForm() {
         console.log(response.data);
         setIsLoading(false);
         console.log("login success");
-        localStorage.setItem('accessToken', token);
       })
       .catch((error) => {
         if (error instanceof CanceledError) return;

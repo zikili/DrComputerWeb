@@ -4,7 +4,6 @@ const app = express();
 import userRoute from "./routes/user_route";
 import postRoute from "./routes/post_route";
 import authRoute from "./routes/auth_route";
-import cors from "cors"
 import env from "dotenv";
 env.config();
 
@@ -20,7 +19,7 @@ const init = () => {
       app.use(bodyParser.urlencoded({ extended: true }));
       app.use(bodyParser.json());
       app.use(cors());
-      
+
       app.use("/auth", authRoute);
       app.use("/user", userRoute);
       app.use("/post", postRoute);
