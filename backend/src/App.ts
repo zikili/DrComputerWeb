@@ -1,4 +1,5 @@
 import express, { Express } from "express";
+import cors from "cors";
 const app = express();
 import userRoute from "./routes/user_route";
 import postRoute from "./routes/post_route";
@@ -19,6 +20,7 @@ const init = () => {
       app.use(bodyParser.urlencoded({ extended: true }));
       app.use(bodyParser.json());
       app.use(cors());
+      
       app.use("/auth", authRoute);
       app.use("/user", userRoute);
       app.use("/post", postRoute);
