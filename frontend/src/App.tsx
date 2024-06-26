@@ -1,10 +1,14 @@
-import StudentForm from "./components/Register/RegisterPage.tsx"
+
+import LoginForm from "./components/Login/LoginForm"
+import RegisterForm from "./components/Register/RegisterPage"
+
 function App() {
   console.log('App')
 
   return (
     <div>
-      <StudentForm />
+      <LoginForm />
+      <RegisterForm />
     </div>
 
   )

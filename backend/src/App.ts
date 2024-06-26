@@ -18,8 +18,8 @@ const init = () => {
     mongoose.connect(process.env.DATABASE_URL).then(() => {
       app.use(bodyParser.urlencoded({ extended: true }));
       app.use(bodyParser.json());
-
       app.use(cors());
+
       app.use("/auth", authRoute);
       app.use("/user", userRoute);
       app.use("/post", postRoute);
