@@ -70,7 +70,7 @@ const login = async (req: Request, res: Response) => {
   try {
     const user = await User.findOne({ email: email });
     if (user == null) {
-      return res.status(400).send("User doesnot exists");
+      return res.status(400).send("User does not exists");
     }
     // compare pwd
     const isMatch = await bcrypt.compare(password, user.password);
