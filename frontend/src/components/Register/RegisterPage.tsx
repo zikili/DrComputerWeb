@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import axios, { CanceledError } from "axios";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "./RegisterPage.css";
 
 function RegisterPage() {
-  const [username, setUserName] = useState("");
+  const [_id, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({
-    username: "",
+    _id: "",
     email: "",
     password: "",
   });
@@ -21,13 +22,13 @@ function RegisterPage() {
 
   const validateForm = () => {
     let valid = true;
-    const errors = { username: "", email: "", password: "" };
+    const errors = { _id: "", email: "", password: "" };
 
-    if (username.trim() === "") {
-      errors.username = "Username is required";
+    if (_id.trim() === "") {
+      errors._id = "Username is required";
       valid = false;
-    } else if (username.length > 10) {
-      errors.username = "Username cannot exceed 10 characters";
+    } else if (_id.length > 10) {
+      errors._id = "Username cannot exceed 10 characters";
       valid = false;
     }
 
@@ -58,7 +59,7 @@ function RegisterPage() {
       setIsLoading(true);
       try {
         const dataAuth = { email, password };
-        const dataUser = { username, image: "image" };
+        const dataUser = { _id, image: "image" };
         const registerResponse = await axios.post(
           "http://localhost:3000/auth/register",
           dataAuth,
@@ -79,7 +80,7 @@ function RegisterPage() {
           "Content-Type": "application/json", // Adjust content type as needed
         };
         const userResponse = await axios.post(
-          "http://localhost:3000/user/",
+          "http://localhost:3000/user",
           dataUser,
           { headers, signal: controller.signal }
         );
@@ -106,20 +107,20 @@ function RegisterPage() {
       </div>
       <form className="register-form" onSubmit={onSubmit}>
         <div className="form-group">
-          <label htmlFor="username" className="form-label">
+          <label htmlFor="_id" className="form-label">
             Username:
           </label>
           <input
             type="text"
-            id="username"
+            id="_id"
             name="username"
             className="form-control"
-            value={username}
+            value={_id}
             maxLength={10}
             onChange={(event) => setUserName(event.target.value)}
           />
-          {errors.username && (
-            <small className="error">{errors.username}</small>
+          {errors._id && (
+            <small className="error">{errors._id}</small>
           )}
         </div>
         <div className="form-group">
