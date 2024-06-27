@@ -33,6 +33,7 @@ class BaseController<ModelInterface>{
             const newMyObject = await this.model.create(myObject);
             res.status(201).json(newMyObject);
         } catch (err) {
+            console.log(err)
             res.status(500).send(err.message);
         }
     }

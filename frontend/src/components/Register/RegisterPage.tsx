@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import axios, { CanceledError } from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./RegisterPage.css";
+import { loginUser, registerUser } from "../../services/user-service";
 
 function RegisterPage() {
-  const [_id, setUserName] = useState("");
+  const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({
-    _id: "",
+    username: "",
     email: "",
     password: "",
   });
@@ -22,13 +23,13 @@ function RegisterPage() {
 
   const validateForm = () => {
     let valid = true;
-    const errors = { _id: "", email: "", password: "" };
+    const errors = { username: "", email: "", password: "" };
 
-    if (_id.trim() === "") {
-      errors._id = "Username is required";
+    if (username.trim() === "") {
+      errors.username = "Username is required";
       valid = false;
-    } else if (_id.length > 10) {
-      errors._id = "Username cannot exceed 10 characters";
+    } else if (username.length > 10) {
+      errors.username = "Username cannot exceed 10 characters";
       valid = false;
     }
 
@@ -58,22 +59,23 @@ function RegisterPage() {
       const controller = new AbortController();
       setIsLoading(true);
       try {
-        const dataAuth = { email, password };
-        const dataUser = { _id, image: "image" };
-        const registerResponse = await axios.post(
-          "http://localhost:3000/auth/register",
-          dataAuth,
-          { signal: controller.signal }
-        );
-        const loginResponse = await axios.post(
-          "http://localhost:3000/auth/login",
-          dataAuth,
-          { signal: controller.signal }
-        );
-        console.log("Registration Successful:", registerResponse.data);
-        console.log("Login Successful:", loginResponse.data);
+        const dataAuth = { image:"image",username,email, password };
+        const dataUser = { _id:username, image: "image" };
+        // const registerResponse = await axios.post(
+        //   "http://localhost:3000/auth/register",
+        //   dataAuth,
+        //   { signal: controller.signal }
+        // );
+        // const loginResponse = await axios.post(
+        //   "http://localhost:3000/auth/login",
+        //   dataAuth,
+        //   { signal: controller.signal }
+        // );
+        const registerResponse = await registerUser(dataAuth);
+        const loginResponse =await loginUser({email,password})
+        console.log("Registration Successful:", registerResponse);
+        console.log("Login Successful:", loginResponse);
         setMessage("Registration Successful!");
-        localStorage.setItem("accessToken",loginResponse.data.accessToken)
         //TODO save accessToken in local storage
         const headers = {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -86,7 +88,7 @@ function RegisterPage() {
         );
         setError("");
         console.log(userResponse.data);
-      } catch (error) {
+      } catch (error:unknown) {
         if (axios.isAxiosError(error) && error instanceof CanceledError) return;
         console.error("Registration Error:", error);
         setError(
@@ -107,20 +109,20 @@ function RegisterPage() {
       </div>
       <form className="register-form" onSubmit={onSubmit}>
         <div className="form-group">
-          <label htmlFor="_id" className="form-label">
+          <label htmlFor="username" className="form-label">
             Username:
           </label>
           <input
             type="text"
-            id="_id"
+            id="username"
             name="username"
             className="form-control"
-            value={_id}
+            value={username}
             maxLength={10}
             onChange={(event) => setUserName(event.target.value)}
           />
-          {errors._id && (
-            <small className="error">{errors._id}</small>
+          {errors.username && (
+            <small className="error">{errors.username}</small>
           )}
         </div>
         <div className="form-group">
