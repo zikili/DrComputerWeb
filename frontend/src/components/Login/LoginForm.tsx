@@ -34,6 +34,7 @@ function LoginForm() {
         console.log(response.data);
         setIsLoading(false);
         console.log("login success");
+        localStorage.setItem("accessToken",response.data.accessToken)
       })
       .catch((error) => {
         if (error instanceof CanceledError) return;
@@ -45,8 +46,12 @@ function LoginForm() {
   };
 
   return (
+
     <div className="form-container">
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="login-header">
+        <h1>Login</h1>
+      </div>
+      <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
             Email:
