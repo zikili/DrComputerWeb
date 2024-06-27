@@ -1,6 +1,8 @@
-import axios from 'axios';
-import apiClient from './api-client'; // Adjust path as per your project structure
-import { refreshTokens } from './user-service';
+import { CanceledError } from 'axios';
+// import axios from 'axios';
+// import apiClient from './api-client'; // Adjust path as per your project structure
+// import UserService from './user-service';
+import createHttpService from './http-service';
 export interface IPostComment {
     userId: string;
     content: string;
@@ -18,42 +20,8 @@ export interface IPost {
     comments: IPostComment[];
 
 }
+export{CanceledError}
 
-class PostService {
-  async post(user: IPost): Promise<IPost | string> {
-    try {
-      const accessToken = localStorage.getItem("accessToken");
-      if (!accessToken) {
-        throw new Error("Access token not found");
-      }
+const PostService = createHttpService<IPost>('/post');
 
-      const headers = {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      };
-
-      const response = await apiClient.post("/post/", user, { headers });
-
-      return response.data; // Return posted data
-    } catch (error:unknown) {
-      if (axios.isAxiosError(error)&&error.response && error.response.status === 403) {
-        // Token refresh logic
-        const tokens = await refreshTokens();
-        console.log(tokens)
-        if (tokens) {
-          // Retry posting after token refresh
-          const retryResponse = await this.post(user);
-          return retryResponse;
-        } else {
-          console.error("Failed to refresh tokens");
-          throw ("Failed to refresh tokens") // Handle failure to refresh tokens
-        }
-      } else {
-        console.error("Error posting:", error);
-        throw ("Error posting:"+ error); // Handle other posting errors
-      }
-    }
-  }
-}
-
-export default new PostService();
+export default PostService;

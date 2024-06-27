@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import "./LoginForm.css"; // Import your CSS file
-import { IloginUser, loginUser } from "../../services/user-service";
+import UserService, { IloginUser } from "../../services/user-service";
 import { CanceledError } from "axios";
 
 const schema = z.object({
@@ -25,7 +25,8 @@ function LoginForm() {
 
   const onSubmit = async (data: IloginUser) => {
     console.log("onsubmit", data);
-    await loginUser(data)
+    const userService:UserService = new UserService();
+    await userService.loginUser(data)
       .then(() => {
         setIsLoading(false);
         console.log("login success");

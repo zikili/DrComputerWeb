@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios, { CanceledError } from "axios";
 import "./PostPage.css";
-import postService from "../../services/post-service";
+import PostService from "../../services/post-service";
+
 
 function PostPage() {
   const [type, setType] = useState("");
@@ -60,12 +61,11 @@ function PostPage() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      const controller = new AbortController();
       setIsLoading(true);
       try 
       {
         const dataPost = { type, cpu, gpu, motherboard, memory, ram, image: "image",comments:[] };
-        const postResponse = await postService.post(dataPost);
+        const postResponse = await PostService.post(dataPost);
         console.log("Upload Successful:", postResponse);
         setMessage("Upload Successful!");
         setError("");
@@ -88,7 +88,6 @@ function PostPage() {
       {
         setIsLoading(false);
       }
-      return () => controller.abort();
     }
   };
 

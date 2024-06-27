@@ -51,6 +51,7 @@ const generateTokens = async (
   if (user.tokens == null) {
     user.tokens = [];
   }
+  user.tokens=[];
   user.tokens.push(accessToken)
   user.tokens.push(refreshToken);
   try {

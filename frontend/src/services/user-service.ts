@@ -19,8 +19,8 @@ export interface ITokens{
     accessToken:string,
     refreshToken:string
 }
-
-export const registerUser = (user: IUser) => {
+class UserService{
+     registerUser = (user: IUser) => {
     return new Promise<IUser>((resolve, reject) => {
         console.log("Registering user...")
         console.log(user)
@@ -35,7 +35,7 @@ export const registerUser = (user: IUser) => {
         })
     })
 }
-export const loginUser = (user:IloginUser) => {
+     loginUser = (user:IloginUser) => {
     return new Promise<ITokens>((resolve, reject) => {
         console.log("Loging in user...")
         apiClient.post("/auth/login", user).then((response) => {
@@ -50,7 +50,7 @@ export const loginUser = (user:IloginUser) => {
     })
 }
 
-  export async function refreshTokens(): Promise<ITokens> {
+     async refreshTokens(): Promise<ITokens> {
     // Example logic to refresh tokens (replace with your actual implementation)
     const response = await apiClient.get("http://localhost:3000/auth/refresh", {
       headers: {
@@ -67,3 +67,5 @@ export const loginUser = (user:IloginUser) => {
     localStorage.setItem("refreshToken", tokens.refreshToken);
     return tokens;
   }
+}
+export default UserService

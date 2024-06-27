@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import axios, { CanceledError } from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./RegisterPage.css";
-import { loginUser, registerUser } from "../../services/user-service";
+import UserService from "../../services/user-service";
+
 
 function RegisterPage() {
   const [username, setUserName] = useState("");
@@ -71,8 +72,9 @@ function RegisterPage() {
         //   dataAuth,
         //   { signal: controller.signal }
         // );
-        const registerResponse = await registerUser(dataAuth);
-        const loginResponse =await loginUser({email,password})
+        const userService:UserService=new UserService();
+        const registerResponse = await userService.registerUser(dataAuth);
+        const loginResponse =await userService.loginUser({email,password})
         console.log("Registration Successful:", registerResponse);
         console.log("Login Successful:", loginResponse);
         setMessage("Registration Successful!");

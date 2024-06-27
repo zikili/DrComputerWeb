@@ -1,3 +1,6 @@
+//TODO fix test after removing user scheme
+
+
 import request from "supertest";
 import init from "../App";
 import mongoose from "mongoose";

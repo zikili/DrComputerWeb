@@ -1,3 +1,5 @@
+//TODO remove this scheme
+
 import mongoose from "mongoose";
 
 export interface IUser {
