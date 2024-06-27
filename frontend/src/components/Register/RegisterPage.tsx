@@ -72,10 +72,10 @@ function RegisterPage() {
         console.log("Registration Successful:", registerResponse.data);
         console.log("Login Successful:", loginResponse.data);
         setMessage("Registration Successful!");
-
+        localStorage.setItem("accessToken",loginResponse.data.accessToken)
         //TODO save accessToken in local storage
         const headers = {
-          Authorization: `Bearer ${loginResponse.data.accessToken}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           "Content-Type": "application/json", // Adjust content type as needed
         };
         const userResponse = await axios.post(
@@ -158,7 +158,7 @@ function RegisterPage() {
         </button>
         {isLoading && <div className="spinner-border text-primary" />}
         {message && <p className="message">{message}</p>}
-        {error && <div className="alert alert-danger">{error}</div>}
+        {error && <div className="alert alert-danger alert-dismissible fade show">{error}</div>}
       </form>
     </div>
   );
