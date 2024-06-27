@@ -7,6 +7,8 @@ import { Document } from "mongoose";
 const register = async (req: Request, res: Response) => {
   const email = req.body.email;
   const password = req.body.password;
+  const username=req.body.username
+  const image=req.body.image
   if (email === undefined || password === undefined) {
     return res.status(400).send("Email and password are required");
   }
@@ -18,6 +20,8 @@ const register = async (req: Request, res: Response) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     const newUser = await User.create({
+      image: image,
+      username:username,
       email: email,
       password: hashedPassword,
     });
@@ -47,6 +51,8 @@ const generateTokens = async (
   if (user.tokens == null) {
     user.tokens = [];
   }
+  user.tokens=[];
+  user.tokens.push(accessToken)
   user.tokens.push(refreshToken);
   try {
     await user.save();
@@ -128,7 +134,7 @@ const extractToken = (req: Request): string => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   return token;
-};
+}
 
 const logout = async (req: Request, res: Response) => {
   const refreshToken = extractToken(req);
@@ -165,23 +171,19 @@ const logout = async (req: Request, res: Response) => {
 
 export type AuthRequest = Request & { user: { _id: string } };
 
-export const authMiddleware = async (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-) => {
+export const authMiddleware = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const token = extractToken(req);
   if (token == null) {
-    return res.sendStatus(401);
+      return res.sendStatus(401);
   }
   jwt.verify(token, process.env.TOKEN_SECRET, (err, data: jwt.JwtPayload) => {
-    if (err) {
-      return res.sendStatus(401);
-    }
-    const id = data._id;
-    req.user = { _id: id };
-    return next();
-  }); // as { _id: string };
-};
+      if (err) {
+          return res.sendStatus(403);
+      }
+      const id = data._id;
+      req.user = { _id: id };
+      return next();
+  });// as { _id: string };
+}
 
 export default { register, login, logout, authMiddleware, refresh };

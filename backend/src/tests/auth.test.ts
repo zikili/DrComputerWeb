@@ -6,6 +6,8 @@ import User from "../models/auth_user_model";
 
 jest.setTimeout(20000);
 type TestUser = {
+  image:string
+  username: string;
   email: string;
   password: string;
   accessToken?: string;
@@ -16,6 +18,8 @@ type TestUser = {
 const user: TestUser = {
   email: "test@test.com",
   password: "1234",
+  username: "XXXX",
+  image:"image"
 };
 
 let app: App;

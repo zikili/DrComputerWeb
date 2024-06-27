@@ -8,20 +8,24 @@ jest.setTimeout(20000);
 type TestUser = {
   email: string;
   password: string;
+  image:string;
+  username: string;
   _id?: string;
   accessToken?: string;
 };
 
 const user: TestUser = {
-  email: "testStudent@test.com",
+  email: "testPost@test.com",
+  image:"image",
+  username: "XXXXXXXXXXX",
   password: "1234",
 };
 const comment={
-  userId:  user._id,
+  userId:  user.username,
   content:"Hello World"
 }
 const testPost1 = {
-  owner: user._id,
+  owner: user.username,
   type: "gaming",
   gpu: "ryzen5000",
   cpu: "i7",

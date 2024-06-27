@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios, { CanceledError } from "axios";
 import "./PostPage.css";
+import PostService from "../../services/post-service";
+
 
 function PostPage() {
   const [type, setType] = useState("");
@@ -9,7 +11,7 @@ function PostPage() {
   const [motherboard, setMotherboard] = useState("");
   const [memory, setMemory] = useState("");
   const [ram, setRam] = useState("");
-  const [image, setImage] = useState("");
+  //const [image, setImage] = useState("");
   const [errors, setErrors] = useState({
     type: "",
     gpu: "",
@@ -59,26 +61,33 @@ function PostPage() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      const controller = new AbortController();
       setIsLoading(true);
-      try {
-        const dataPost = { type, cpu, gpu, motherboard, memory, ram, image: "" };
-        const postResponse = await axios.post(
-          "http://localhost:3000/post/",
-          dataPost,
-          { signal: controller.signal }
-        );
-        console.log("Upload Successful:", postResponse.data);
+      try 
+      {
+        const dataPost = { type, cpu, gpu, motherboard, memory, ram, image: "image",comments:[] };
+        const postResponse = await PostService.post(dataPost);
+        console.log("Upload Successful:", postResponse);
         setMessage("Upload Successful!");
-      } catch (error) {
+        setError("");
+      } catch (error:unknown) 
+      {
         if (axios.isAxiosError(error) && error instanceof CanceledError) return;
+        if(axios.isAxiosError(error)&&error.response?.status === 403){
+          console.error("Refresh Error:", error);
+            setError(
+              "An error occurred during authentication."
+            );
+            setMessage("");
+      }
+      else{
         console.error("Upload Post Error:", error);
-        setError("An error occurred during upload the post. Please try again later.");
+        setError("An error occurred during upload. Please try again later.");
         setMessage("");
-      } finally {
+      }
+      } finally 
+      {
         setIsLoading(false);
       }
-      return () => controller.abort();
     }
   };
 

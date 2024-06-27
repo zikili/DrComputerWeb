@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
-import axios, { CanceledError } from "axios";
 import "./LoginForm.css"; // Import your CSS file
+import UserService, { IloginUser } from "../../services/user-service";
+import { CanceledError } from "axios";
 
 const schema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -22,27 +23,21 @@ function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
 
-  const onSubmit = (data: FieldValues) => {
+  const onSubmit = async (data: IloginUser) => {
     console.log("onsubmit", data);
-    const controller = new AbortController();
-    setIsLoading(true);
-    axios
-      .post("http://localhost:3000/auth/login", data, {
-        signal: controller.signal,
-      })
-      .then((response) => {
-        console.log(response.data);
+    const userService:UserService = new UserService();
+    await userService.loginUser(data)
+      .then(() => {
         setIsLoading(false);
         console.log("login success");
-        localStorage.setItem("accessToken",response.data.accessToken)
       })
       .catch((error) => {
         if (error instanceof CanceledError) return;
         console.log(error);
-        setError(error.message);
+        setError("Wrong credentials, please try again.");
         setIsLoading(false);
       });
-    return () => controller.abort();
+
   };
 
   return (

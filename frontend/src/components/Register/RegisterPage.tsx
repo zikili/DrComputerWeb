@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import axios, { CanceledError } from "axios";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "./RegisterPage.css";
+import UserService from "../../services/user-service";
+
 
 function RegisterPage() {
   const [username, setUserName] = useState("");
@@ -57,35 +60,37 @@ function RegisterPage() {
       const controller = new AbortController();
       setIsLoading(true);
       try {
-        const dataAuth = { email, password };
-        const dataUser = { username, image: "image" };
-        const registerResponse = await axios.post(
-          "http://localhost:3000/auth/register",
-          dataAuth,
-          { signal: controller.signal }
-        );
-        const loginResponse = await axios.post(
-          "http://localhost:3000/auth/login",
-          dataAuth,
-          { signal: controller.signal }
-        );
-        console.log("Registration Successful:", registerResponse.data);
-        console.log("Login Successful:", loginResponse.data);
+        const dataAuth = { image:"image",username,email, password };
+        const dataUser = { _id:username, image: "image" };
+        // const registerResponse = await axios.post(
+        //   "http://localhost:3000/auth/register",
+        //   dataAuth,
+        //   { signal: controller.signal }
+        // );
+        // const loginResponse = await axios.post(
+        //   "http://localhost:3000/auth/login",
+        //   dataAuth,
+        //   { signal: controller.signal }
+        // );
+        const userService:UserService=new UserService();
+        const registerResponse = await userService.registerUser(dataAuth);
+        const loginResponse =await userService.loginUser({email,password})
+        console.log("Registration Successful:", registerResponse);
+        console.log("Login Successful:", loginResponse);
         setMessage("Registration Successful!");
-        localStorage.setItem("accessToken",loginResponse.data.accessToken)
         //TODO save accessToken in local storage
         const headers = {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           "Content-Type": "application/json", // Adjust content type as needed
         };
         const userResponse = await axios.post(
-          "http://localhost:3000/user/",
+          "http://localhost:3000/user",
           dataUser,
           { headers, signal: controller.signal }
         );
         setError("");
         console.log(userResponse.data);
-      } catch (error) {
+      } catch (error:unknown) {
         if (axios.isAxiosError(error) && error instanceof CanceledError) return;
         console.error("Registration Error:", error);
         setError(
