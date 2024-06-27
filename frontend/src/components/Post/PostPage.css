@@ -1,0 +1,90 @@
+/* Container for the post page */
+.post-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f2f5;
+}
+
+/* Container for the form and header */
+.post-form-container {
+    text-align: center;
+}
+
+/* Styling for the form */
+.post-form {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    margin-top: 20px; /* Add margin to separate form from header */
+}
+
+/* Form group for spacing and styling */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Label styling */
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Input field styling */
+.form-control {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Input focus styling */
+.form-control:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Button styling */
+.btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Button hover effect */
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Error message styling */
+.error {
+    color: red;
+    font-size: 0.875em;
+    margin-top: 5px;
+}
+
+/* Message styling */
+.message {
+    color: green;
+    font-size: 1em;
+    margin-top: 10px;
+}
+
+/* Spinner styling */
+.spinner-border {
+    display: block;
+    margin: 10px auto;
+}
