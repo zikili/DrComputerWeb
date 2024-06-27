@@ -27,6 +27,8 @@ import AuthController from "../controllers/auth_controller";
  *          type: object
  *          required:
  *              - email
+ *              - username
+ *              - image
  *              - password
  *          properties:
  *              email:
@@ -35,6 +37,12 @@ import AuthController from "../controllers/auth_controller";
  *              password:
  *                  type: string
  *                  description: The user password
+ *              username:
+ *                  type: string
+ *                  description: The user name
+ *              image:
+ *                  type: string
+ *                  description: The user image
  *          example:
  *              email: 'bob@gmail.com'
  *              password: '123456'
@@ -65,22 +73,23 @@ router.post("/register", AuthController.register);
  * @swagger
  * components:
  *   schemas:
- *       Tokens:
- *           type: object
+ *     Tokens:
+ *       type: object
  *       required:
- *           - accessToken
- *           - refreshToken
+ *         - accessToken
+ *         - refreshToken
  *       properties:
- *           accessToken:
- *               type: string
- *               description: The JWT access token
- *           refreshToken:
- *               type: string
- *               description: The JWT refresh token
+ *         accessToken:
+ *           type: string
+ *           description: The JWT access token
+ *         refreshToken:
+ *           type: string
+ *           description: The JWT refresh token
  *       example:
- *           accessToken: '123cd123x1xx1'
- *           refreshToken: '134r2134cr1x3c'
+ *         accessToken: '123cd123x1xx1'
+ *         refreshToken: '134r2134cr1x3c'
  */
+
 /**
  * @swagger
  * /auth/login:
@@ -114,7 +123,7 @@ router.post("/login", AuthController.login);
 *           - bearerAuth: []
 *       responses:
 *           200:
-*               description: The acess & refresh tokens
+*               description: The access & refresh tokens
 *               content:
 *                   application/json:
 *                       schema:
