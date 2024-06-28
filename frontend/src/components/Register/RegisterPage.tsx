@@ -3,9 +3,10 @@ import axios, { CanceledError } from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./RegisterPage.css";
 import UserService from "../../services/user-service";
-
+import { useNavigate } from 'react-router-dom';
 
 function RegisterPage() {
+  const navigate = useNavigate();
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -90,6 +91,7 @@ function RegisterPage() {
         );
         setError("");
         console.log(userResponse.data);
+        navigate('/Home');
       } catch (error:unknown) {
         if (axios.isAxiosError(error) && error instanceof CanceledError) return;
         console.error("Registration Error:", error);
@@ -159,7 +161,7 @@ function RegisterPage() {
           )}
         </div>
         <button type="submit" className="btn btn-primary">
-          Submit
+          Register
         </button>
         {isLoading && <div className="spinner-border text-primary" />}
         {message && <p className="message">{message}</p>}
