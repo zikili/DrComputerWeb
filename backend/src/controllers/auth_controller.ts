@@ -117,7 +117,7 @@ const refresh = async (req: Request, res: Response) => {
           await user.save();
           return res.sendStatus(403);
         }
-        user.tokens = user.tokens.filter((token) => token !== refreshToken);
+        // user.tokens = user.tokens.filter((token) => token !== refreshToken);
         const tokens = await generateTokens(user);
         if (tokens == null) {
           return res.status(400).send("Error generating tokens");

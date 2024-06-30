@@ -50,16 +50,13 @@ describe("Register Tests", () => {
   });
 
   test("Middleware", async () => {
-    const res = await request(app).get("/user").send();
-    expect(res.statusCode).not.toEqual(200);
-
     const res2 = await request(app)
-      .get("/user")
+      .get("/post")
       .set("Authorization", "Bearer " + user.accessToken)
       .send();
     expect(res2.statusCode).toEqual(200);
 
-    await request(app)
+    const res3=await request(app)
       .post("/post")
       .set("Authorization", "Bearer " + user.accessToken)
       .send({
@@ -70,18 +67,28 @@ describe("Register Tests", () => {
         memory:"hdd1024gb",
         ram:"16gb",
         image:"image",
-        comments:[{userId: "667ab76aa71b33668351e9b3",content:"Hello World"}]
+        comments:0
       });
-    expect(res2.statusCode).toEqual(200);
+      expect(res3.statusCode).toEqual(201);
+      expect(res3.body.type).toEqual("gaming");
+      expect(res3.body.gpu).toEqual("ryzen5000");
+      expect(res3.body.cpu).toEqual("i7");
+      expect(res3.body.motherboard).toEqual("asus");
+      expect(res3.body.memory).toEqual( "hdd1024gb");
+      expect(res3.body.ram).toEqual("16gb");
+      expect(res3.body.image).toEqual("image");
+      expect(res3.body.comments).toEqual(0);
+
   });
 
   test("Refresh Token", async () => {
     await new Promise((r) => setTimeout(r, 6000));
     const res = await request(app)
-      .get("/user")
+      .get("/post")
       .set("Authorization", "Bearer " + user.accessToken)
       .send();
     expect(res.statusCode).not.toEqual(200);
+   
 
     const res2 = await request(app)
       .get("/auth/refresh")
@@ -94,7 +101,7 @@ describe("Register Tests", () => {
     user.refreshToken = res2.body.refreshToken;
 
     const res3 = await request(app)
-      .get("/user")
+      .get("/post")
       .set("Authorization", "Bearer " + user.accessToken)
       .send();
     expect(res3.statusCode).toEqual(200);

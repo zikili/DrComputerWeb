@@ -35,11 +35,10 @@ class UserService{
         })
     })
 }
-    loginUser = (user:IloginUser) => {
+     loginUser = (user:IloginUser) => {
     return new Promise<ITokens>((resolve, reject) => {
         console.log("Loging in user...")
-        console.log(user)
-        apiClient.post("http://localhost:3000/auth/login", user).then((response) => {
+        apiClient.post("/auth/login", user).then((response) => {
             localStorage.setItem("accessToken",response.data.accessToken)
             localStorage.setItem("refreshToken",response.data.refreshToken)
             console.log(response)
@@ -51,12 +50,42 @@ class UserService{
     })
 }
 
-    logoutUser = () => {
+
+
+      refreshTokens= async()=> {
+        localStorage.removeItem("accessToken")
+
+        return new Promise<ITokens>((resolve, reject) => {
+    apiClient.get("/auth/refresh", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("refreshToken")}`,
+        "Content-Type": "application/json",
+      },
+    }).then((response)=>{
+        localStorage.removeItem("refreshToken")
+        console.log(response)
+        const tokens:ITokens= {
+            accessToken: response.data.accessToken,
+            refreshToken: response.data.refreshToken,
+          };
+          console.log(tokens.refreshToken);
+          localStorage.setItem("accessToken", tokens.accessToken);
+          localStorage.setItem("refreshToken", tokens.refreshToken);
+         resolve(tokens);
+    }).catch((error) => {
+        console.log(error)
+        reject(error)
+    }) ;
+
+  })
+}
+
+logoutUser = () => {
     return new Promise<Response>((resolve, reject) => {
         console.log("Logging out user...")
         const refreshToken = localStorage.getItem("refreshToken");
         if (refreshToken) {
-          apiClient.get("http://localhost:3000/auth/logout",{ headers: 
+          apiClient.get("/auth/logout",{ headers: 
           {
             Authorization: `Bearer ${refreshToken}`,
             "Content-Type": "application/json",
@@ -71,26 +100,5 @@ class UserService{
         })  
     }})
 }
-
-     async refreshTokens(): Promise<ITokens> {
-    // Example logic to refresh tokens (replace with your actual implementation)
-    const response = await apiClient.get("/auth/refresh", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("refreshToken")}`,
-        "Content-Type": "application/json",
-      },
-    });
-    
-
-
-
-    const tokens:ITokens= {
-      accessToken: response.data.accessToken,
-      refreshToken: response.data.refreshToken,
-    };
-    localStorage.setItem("accessToken", tokens.accessToken);
-    localStorage.setItem("refreshToken", tokens.refreshToken);
-    return tokens;
-  }
 }
 export default UserService

@@ -1,6 +1,5 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import apiClient,{CanceledError} from "./api-client";
-import UserService from "./user-service";
 
 
 {CanceledError}
@@ -14,48 +13,56 @@ class HttpService<T extends BaseEntity>{
     constructor(endpoint:string){
         this.endpoint=endpoint;
     }
-    getAll(){
-        const controller=new AbortController();
-        const request= apiClient.get<T[]>(this.endpoint,{signal:controller.signal})
-        return {request,cancel:()=>controller.abort}
+    async getAll(): Promise<{ req: T[]; cancel: () => void }> {
+      const controller = new AbortController();
+      const { signal } = controller;
+  
+      try {
+        const response: AxiosResponse<T[]> = await apiClient.get<T[]>(this.endpoint, {
+          signal,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            "Content-Type": "application/json",
+          },
+        });
+        return { req: response.data, cancel: () => controller.abort() }; // Access the data property
+      } catch (error) {
+        if (axios.isCancel(error)) {
+          console.log('Request canceled:', error.message);
+        } else {
+          throw error;
+        }
+        console.log(error);
+        throw error
+      }
     }
-    async post(object: T): Promise<T|string> {
+  
+  
+    async post(object: T) {
         const controller = new AbortController();
         try {
-            const response = await apiClient.post<T>(this.endpoint , object, {
+            const req = await apiClient.post<T>(this.endpoint , object, {
                 signal: controller.signal,
                 headers: {
                   Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
                   "Content-Type": "application/json",
                 },
               });
-          return response.data; // Return posted data
+              return { req, cancel: () => controller.abort() }; // Return posted data
         } catch (error: unknown) {
-          if (axios.isAxiosError(error) && error.response && error.response.status === 403) {
-            // Token refresh logic
-            const userService:UserService=new UserService();
-            const tokens = await userService.refreshTokens();
-            if (tokens) {
-              // Retry posting after token refresh
-              const retryResponse = await this.post(object);
-              return retryResponse;
-            } else {
-              throw new Error('Failed to authenticate');
-            }
-          } else {
+          if (axios.isCancel(error)) return;
             throw new Error('Error posting: ' + error);
-          }
         }
       }
-        update(object:T){
+        async update(object:T){
             const controller=new AbortController();
-            const request= apiClient.put<T[]>(this.endpoint+object._id,object,{signal:controller.signal})
+            const request= await apiClient.put<T[]>(this.endpoint+object._id,object,{signal:controller.signal})
             return {request,cancel:()=>controller.abort}
         }
         
-        delete(id:string){
+        async delete(id:string){
             const controller=new AbortController();
-            const request= apiClient.delete<T[]>(this.endpoint + id,{signal:controller.signal})
+            const request= await apiClient.delete<T[]>(this.endpoint + id,{signal:controller.signal})
             return {request,cancel:()=>controller.abort}
         }
 

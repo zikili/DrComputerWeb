@@ -30,6 +30,7 @@ function HomePage() {
       <div className="button-container">
         <button className="postBTN" onClick={() => navigate('/Post')}>Post</button>
         <button className="logoutBTN" onClick={async () => await logoutFunction()}>LogOut</button>
+        <button className="feedBTN" onClick={() => navigate('/Feed')}>Feed</button>
       </div>
       <div>
           {isLoading && <div className="spinner-border text-primary" />}

@@ -62,7 +62,7 @@ function RegisterPage() {
       setIsLoading(true);
       try {
         const dataAuth = { image:"image",username,email, password };
-        const dataUser = { _id:username, image: "image" };
+        // const dataUser = { _id:username, image: "image" };
         // const registerResponse = await axios.post(
         //   "http://localhost:3000/auth/register",
         //   dataAuth,
@@ -80,17 +80,16 @@ function RegisterPage() {
         console.log("Login Successful:", loginResponse);
         setMessage("Registration Successful!");
         //TODO save accessToken in local storage
-        const headers = {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          "Content-Type": "application/json", // Adjust content type as needed
-        };
-        const userResponse = await axios.post(
-          "http://localhost:3000/user",
-          dataUser,
-          { headers, signal: controller.signal }
-        );
+        // const headers = {
+        //   Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        //   "Content-Type": "application/json", // Adjust content type as needed
+        // };
+        // const userResponse = await axios.post(
+        //   "http://localhost:3000/user",
+        //   dataUser,
+        //   { headers, signal: controller.signal }
+        // );
         setError("");
-        console.log(userResponse.data);
         navigate('/Home');
       } catch (error:unknown) {
         if (axios.isAxiosError(error) && error instanceof CanceledError) return;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios, { CanceledError } from "axios";
 import "./PostPage.css";
 import PostService from "../../services/post-service";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 function PostPage() {
   const navigate = useNavigate();
@@ -28,7 +28,15 @@ function PostPage() {
 
   const validateForm = () => {
     let valid = true;
-    const errors = { type: "", gpu: "", cpu: "", motherboard: "", memory: "", ram: "", image: "" };
+    const errors = {
+      type: "",
+      gpu: "",
+      cpu: "",
+      motherboard: "",
+      memory: "",
+      ram: "",
+      image: "",
+    };
 
     if (type.trim() === "") {
       errors.type = "Type is required";
@@ -63,31 +71,37 @@ function PostPage() {
     e.preventDefault();
     if (validateForm()) {
       setIsLoading(true);
-      try 
-      {
-        const dataPost = { type, cpu, gpu, motherboard, memory, ram, image: "image",comments:[] };
+      try {
+        const dataPost = {
+          type,
+          cpu,
+          gpu,
+          motherboard,
+          memory,
+          ram,
+          image: "image",
+          comments: 0,
+        };
         const postResponse = await PostService.post(dataPost);
         console.log("Upload Successful:", postResponse);
         setMessage("Upload Successful!");
         setError("");
-        navigate('/Home');
-      } catch (error:unknown) 
-      {
-        if (axios.isAxiosError(error) && error instanceof CanceledError) return;
-        if(axios.isAxiosError(error)&&error.response?.status === 403){
+        navigate("/Home");
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error) && (error instanceof CanceledError||axios.isCancel(error))) {
+          console.log("CANCELTA OTANU");
+          return;
+        }
+        if (axios.isAxiosError(error) && error.status === 403) {
           console.error("Refresh Error:", error);
-            setError(
-              "An error occurred during authentication."
-            );
-            setMessage("");
-      }
-      else{
-        console.error("Upload Post Error:", error);
-        setError("An error occurred during upload. Please try again later.");
-        setMessage("");
-      }
-      } finally 
-      {
+          setError("An error occurred during authentication.");
+          setMessage("");
+        } else {
+          console.error("Upload Post Error:", error);
+          setError("An error occurred during upload. Please try again later.");
+          setMessage("");
+        }
+      } finally {
         setIsLoading(false);
       }
     }
@@ -152,7 +166,9 @@ function PostPage() {
               value={motherboard}
               onChange={(event) => setMotherboard(event.target.value)}
             />
-            {errors.motherboard && <small className="error">{errors.motherboard}</small>}
+            {errors.motherboard && (
+              <small className="error">{errors.motherboard}</small>
+            )}
           </div>
           <div className="form-group">
             <label htmlFor="memory" className="form-label">

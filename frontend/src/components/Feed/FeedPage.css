@@ -1,0 +1,26 @@
+/* FeedPage.css */
+
+.feed-page {
+    padding: 20px;
+  }
+  
+  .posts-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .post-item {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    width: 300px;
+  }
+  
+  .post-item img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-top: 10px;
+  }
+  
