@@ -52,13 +52,16 @@ class UserService{
 
      async refreshTokens(): Promise<ITokens> {
     // Example logic to refresh tokens (replace with your actual implementation)
-    const response = await apiClient.get("http://localhost:3000/auth/refresh", {
+    const response = await apiClient.get("/auth/refresh", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("refreshToken")}`,
         "Content-Type": "application/json",
       },
     });
     
+
+
+
     const tokens:ITokens= {
       accessToken: response.data.accessToken,
       refreshToken: response.data.refreshToken,

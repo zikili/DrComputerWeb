@@ -145,7 +145,8 @@ const logout = async (req: Request, res: Response) => {
     jwt.verify(
       refreshToken,
       process.env.TOKEN_SECRET,
-      async (err, data: jwt.JwtPayload) => {
+      async (err, data: jwt.JwtPayload) => 
+        {
         if (err) {
           return res.sendStatus(403);
         }
