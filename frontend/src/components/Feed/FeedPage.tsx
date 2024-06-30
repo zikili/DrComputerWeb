@@ -1,43 +1,47 @@
-import  { useState, useEffect } from "react";
-import PostService, { IPost } from "../../services/post-service";
-import "./FeedPage.css";
-import axios, { CanceledError } from "axios";
+import React, { useState, useEffect,useRef } from 'react';
+import PostService, { IPost } from '../../services/post-service'; // Adjust the path as per your project structure
+import axios, {  AxiosResponse } from 'axios';
+import './FeedPage.css';
+const FeedPage: React.FC = () => {
+  const [posts, setPosts] = useState<IPost[]>([]);
+  const [isLoading,setIsLoading]=useState(false)
+  const [error, setError] = useState<string|null>(null);
+ // Prevent state update on unmounted component
+  const cancelRef=useRef<(() => void | undefined) | undefined>();
+  if(cancelRef.current)
+    cancelRef.current()
+  useEffect(() => {
 
-
-
-function FeedPage() {
-    const [isLoading, setIsLoading] = useState(false)
-    const [posts, setPosts] = useState<IPost[]>([])
-    const [error, setError] = useState()
-    useEffect(() => {
-        const fetchData = async () => {
-          setIsLoading(true);
-          const { req, cancel } = await PostService.getAll();
+      const fetchData = async () => {
           try {
-            const res = req;
-            setPosts(res);
-          } catch (err) { 
-            if (err instanceof CanceledError) {
-              console.log("Request canceled:", err.message);
-              return ()=>cancel();
-            }
-            setError(axios.isAxiosError(err)&&err.response?.data || "Failed to fetch posts");
-            if(axios.isAxiosError(err)&&err.message==='Network Error')
-              {
-                   console.log("Error fetching posts:", err)
+            setIsLoading(true);
+              const { req, cancel } = await PostService.getAll(); // Await for the getAll() result
+              cancelRef.current=cancel
+              // Attach the cancel token to the axios request
+              const response: AxiosResponse<IPost[]> = await req;
+              setPosts(response.data);
+          } catch (error) {
+            
+              if (axios.isCancel(error)) {
+                  console.log('Request canceled:', error.message);
+              } else {
+                setError("Error fetching posts")
+                  console.error('Error fetching posts:', error);
               }
-         
-          } finally {
+          }
+          finally {
             setIsLoading(false);
           }
-    
-          return () => {
-            cancel();
-          };
-        };
-    
-        fetchData();
-      }, []);
+      };
+
+      fetchData();
+
+      return () => {
+        if(cancelRef.current)
+        cancelRef.current() // Prevent state update on unmounted component
+      };
+  }, []); // Include cancelToken in dependencies to handle cleanup correctly
+
   return (
     <div className="feed-page">
       <h1>All Posts</h1>
@@ -58,9 +62,10 @@ function FeedPage() {
               <img src={post.image} alt="Post Image" />
             </div>
           ))}
-        </div>
+          </div>
       )}
     </div>
   );
 }
+
 export default FeedPage;
