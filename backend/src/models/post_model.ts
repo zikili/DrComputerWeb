@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import PostCommentSchema, { IPostComment } from "./post_comment_model";
 
 export interface IPost {
     _id: string;
@@ -11,7 +10,7 @@ export interface IPost {
     memory: string;
     ram: string;
     image: string;
-    comments: IPostComment[];
+    comments: number;
 }
 
 const PostSchema = new mongoose.Schema<IPost>({
@@ -48,8 +47,8 @@ const PostSchema = new mongoose.Schema<IPost>({
         required: true,
     },
     comments: {
-        type: [PostCommentSchema],  // Using the schema itself, not the model
-
+        type: Number,
+        required:true  // Using the schema itself, not the model
     }
 });
 

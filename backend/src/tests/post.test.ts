@@ -20,10 +20,7 @@ const user: TestUser = {
   username: "XXXXXXXXXXX",
   password: "1234",
 };
-const comment={
-  userId:  user.username,
-  content:"Hello World"
-}
+
 const testPost1 = {
   owner: user.username,
   type: "gaming",
@@ -33,7 +30,7 @@ const testPost1 = {
   memory:"hdd1024gb",
   ram:"16gb",
   image:"image",
-  comments:[comment]
+  comments:0
 };
 
 let app;
@@ -45,7 +42,6 @@ beforeAll(async () => {
   const res1=await request(app).post("/auth/register").send(user);
   user._id = res1.body._id;
   testPost1.owner=user._id;
-  comment.userId=user._id;
   const res2 = await request(app).post("/auth/login").send(user);
   user.accessToken = res2.body.accessToken;
 });
@@ -79,7 +75,7 @@ test("Test post post", async () => {
   expect(res.body.memory).toEqual(testPost1.memory);
   expect(res.body.ram).toEqual(testPost1.ram);
   expect(res.body.image).toEqual(testPost1.image);
-  expect(res.body.comments[0].userId).toEqual(testPost1.comments[0].userId);
-  expect(res.body.comments[0].content).toEqual(testPost1.comments[0].content);
+  expect(res.body.comments).toEqual(0);
+ 
   
 });

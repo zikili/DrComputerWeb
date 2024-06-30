@@ -17,11 +17,12 @@ export interface IPost {
     memory: string;
     ram: string;
     image: string;
-    comments: IPostComment[];
+    comments: number;
 
 }
 export{CanceledError}
 
 const PostService = createHttpService<IPost>('/post');
+
 
 export default PostService;

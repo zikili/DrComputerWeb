@@ -31,6 +31,7 @@ class BaseController<ModelInterface>{
         const myObject = req.body;
         try {
             const newMyObject = await this.model.create(myObject);
+            await newMyObject.save();
             res.status(201).json(newMyObject);
         } catch (err) {
             console.log(err)
@@ -46,6 +47,7 @@ class BaseController<ModelInterface>{
                 myObject,
                 { new: true }
             );
+            await updatedMyObject.save();
             res.status(200).json(updatedMyObject);
         } catch (err) {
             res.status(500).send(err.message);

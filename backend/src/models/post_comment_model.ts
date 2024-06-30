@@ -1,11 +1,19 @@
 import mongoose from "mongoose";
 
 export interface IPostComment {
+    _id:string
+    postId: string;
     userId: string;
     content: string;
 }
 
 const PostCommentSchema = new mongoose.Schema<IPostComment>({
+
+
+    postId:{
+        type:String,
+        required:true,
+    },
     userId: {
         type: String,
         required: true,
@@ -16,5 +24,5 @@ const PostCommentSchema = new mongoose.Schema<IPostComment>({
     }
 });
 
-export default PostCommentSchema;
+export default mongoose.model<IPostComment>("PostComment", PostCommentSchema);
 
