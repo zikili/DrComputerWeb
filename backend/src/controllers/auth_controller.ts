@@ -138,36 +138,30 @@ const extractToken = (req: Request): string => {
 
 const logout = async (req: Request, res: Response) => {
   const refreshToken = extractToken(req);
+
   if (refreshToken == null) {
-    return res.sendStatus(401);
+      return res.sendStatus(401);
   }
+
   try {
-    jwt.verify(
-      refreshToken,
-      process.env.TOKEN_SECRET,
-      async (err, data: jwt.JwtPayload) => 
-        {
-        if (err) {
+
+      const decoded = jwt.verify(refreshToken, process.env.TOKEN_SECRET) as jwt.JwtPayload;
+
+      const user = await User.findOne({ _id: decoded._id });
+
+      if (!user || !user.tokens.includes(refreshToken)) {
+
           return res.sendStatus(403);
-        }
-        const user = await User.findOne({ _id: data._id });
-        if (user == null) {
-          return res.sendStatus(403);
-        }
-        if (!user.tokens.includes(refreshToken)) {
-          user.tokens = [];
-          await user.save();
-          return res.sendStatus(403);
-        }
-        user.tokens = user.tokens.filter((token) => token !== refreshToken);
-        await user.save();
-        return res.status(200).send();
       }
-    );
+
+      user.tokens = [];
+      await user.save();
+
+      return res.status(200).send();
   } catch (err) {
-    return res.status(400).send(err.message);
+      console.error("Error logging out:", err);
+      return res.status(400).send(err.message);
   }
-  res.send("logout");
 };
 
 export type AuthRequest = Request & { user: { _id: string } };

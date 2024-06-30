@@ -5,6 +5,7 @@ import { z } from "zod";
 import "./LoginForm.css"; // Import your CSS file
 import UserService, { IloginUser } from "../../services/user-service";
 import { CanceledError } from "axios";
+import { useNavigate } from 'react-router-dom';
 
 const schema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -14,6 +15,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 function LoginForm() {
+  const navigate = useNavigate();
   console.log("LoginForm");
   const {
     register,
@@ -30,6 +32,7 @@ function LoginForm() {
       .then(() => {
         setIsLoading(false);
         console.log("login success");
+        navigate('/Home');
       })
       .catch((error) => {
         if (error instanceof CanceledError) return;
@@ -80,7 +83,7 @@ function LoginForm() {
           )}
         </div>
         <button type="submit" className="btn btn-primary">
-          Submit
+          Log In
         </button>
         <div>
           {isLoading && <div className="spinner-border text-primary" />}

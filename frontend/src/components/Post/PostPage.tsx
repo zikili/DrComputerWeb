@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import axios, { CanceledError } from "axios";
 import "./PostPage.css";
 import PostService from "../../services/post-service";
-
+import { useNavigate } from 'react-router-dom';
 
 function PostPage() {
+  const navigate = useNavigate();
   const [type, setType] = useState("");
   const [gpu, setGpu] = useState("");
   const [cpu, setCpu] = useState("");
@@ -69,6 +70,7 @@ function PostPage() {
         console.log("Upload Successful:", postResponse);
         setMessage("Upload Successful!");
         setError("");
+        navigate('/Home');
       } catch (error:unknown) 
       {
         if (axios.isAxiosError(error) && error instanceof CanceledError) return;
@@ -181,7 +183,7 @@ function PostPage() {
             {errors.ram && <small className="error">{errors.ram}</small>}
           </div>
           <button type="submit" className="btn btn-primary">
-            Submit
+            Upload
           </button>
           {isLoading && <div className="spinner-border text-primary" />}
           {message && <p className="message">{message}</p>}
