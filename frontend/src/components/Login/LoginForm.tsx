@@ -6,6 +6,7 @@ import "./LoginForm.css"; // Import your CSS file
 import UserService, { IloginUser } from "../../services/user-service";
 import { CanceledError } from "axios";
 import { useNavigate } from 'react-router-dom';
+import {GoogleLogin, CredentialResponse } from '@react-oauth/google';
 
 const schema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -43,8 +44,22 @@ function LoginForm() {
 
   };
 
-  return (
+  const onSuccess = (credentialResponse: CredentialResponse) => {
+    try {
+    console.log("Google Error");
+    console.log(credentialResponse);
+    navigate('/Home');
+    } catch (error) {
+      console.log("Failed to sign in with Google, please try again later.");
+  }
+}
 
+
+  const onFailure = () =>{
+    console.log("Google Error");
+  }
+
+  return (
     <div className="form-container">
       <div className="login-header">
         <h1>Login</h1>
@@ -85,6 +100,12 @@ function LoginForm() {
         <button type="submit" className="btn btn-primary">
           Log In
         </button>
+        <div className="signGoogle">
+        <GoogleLogin
+          onSuccess={onSuccess}
+          onError={onFailure}
+        />
+      </div>
         <div>
           {isLoading && <div className="spinner-border text-primary" />}
           {error && <div className="alert alert-danger">{error}</div>}
