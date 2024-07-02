@@ -7,6 +7,7 @@ import UserService, { IloginUser } from "../../services/user-service";
 import { CanceledError } from "axios";
 import { useNavigate } from 'react-router-dom';
 import {GoogleLogin, CredentialResponse } from '@react-oauth/google';
+import {jwt_decode} from "jwt-decode";
 
 const schema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -44,15 +45,29 @@ function LoginForm() {
 
   };
 
-  const onSuccess = (credentialResponse: CredentialResponse) => {
+  const onSuccess = async (credentialResponse: CredentialResponse) => {
     try {
-    console.log("Google Error");
-    console.log(credentialResponse);
-    navigate('/Home');
+      console.log(credentialResponse);
+      const decoded:any = jwt_decode(credentialResponse.credential);
+      const dataAuth = {
+        username: decoded.name+"G",
+        email: decoded.email,
+        password: "123456",
+        image: decoded.picture
+      }
+      try{
+        const userService:UserService = new UserService();
+        const registerResponse = await userService.registerUser(dataAuth);
+        console.log("Registration Successful:", registerResponse);
+      }catch(error){
+        console.log(error);
+        console.log("User already exists");
+      }
+      navigate('/Home');
     } catch (error) {
       console.log("Failed to sign in with Google, please try again later.");
+    }
   }
-}
 
 
   const onFailure = () =>{
@@ -116,3 +131,7 @@ function LoginForm() {
 }
 
 export default LoginForm;
+function jwt_decode(credential: string | undefined) {
+  throw new Error("Function not implemented.");
+}
+
