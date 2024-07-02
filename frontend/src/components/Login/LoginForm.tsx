@@ -7,7 +7,7 @@ import UserService, { IloginUser } from "../../services/user-service";
 import { CanceledError } from "axios";
 import { useNavigate } from 'react-router-dom';
 import {GoogleLogin, CredentialResponse } from '@react-oauth/google';
-import {jwt_decode} from "jwt-decode";
+import jwt_decode from 'jwt-decode';
 
 const schema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -48,7 +48,8 @@ function LoginForm() {
   const onSuccess = async (credentialResponse: CredentialResponse) => {
     try {
       console.log(credentialResponse);
-      const decoded:any = jwt_decode(credentialResponse.credential);
+      if(credentialResponse.credential){
+      const decoded:GoogleRes = jwt_decode(credentialResponse.credential);
       const dataAuth = {
         username: decoded.name+"G",
         email: decoded.email,
@@ -64,6 +65,7 @@ function LoginForm() {
         console.log("User already exists");
       }
       navigate('/Home');
+    }
     } catch (error) {
       console.log("Failed to sign in with Google, please try again later.");
     }
@@ -129,9 +131,11 @@ function LoginForm() {
     </div>
   );
 }
-
-export default LoginForm;
-function jwt_decode(credential: string | undefined) {
-  throw new Error("Function not implemented.");
+export interface GoogleRes{
+email: string;
+name: string;
+picture: string;
 }
+export default LoginForm;
+
 
