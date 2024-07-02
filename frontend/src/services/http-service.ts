@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+
 import apiClient,{CanceledError} from "./api-client";
 
 
@@ -13,29 +13,27 @@ class HttpService<T extends BaseEntity>{
     constructor(endpoint:string){
         this.endpoint=endpoint;
     }
-    async getAll(): Promise<{ req: T[]; cancel: () => void }> {
-      const controller = new AbortController();
-      const { signal } = controller;
-  
-      try {
-        const response: AxiosResponse<T[]> = await apiClient.get<T[]>(this.endpoint, {
-          signal,
+
+    async getAll() {
+      const controller = new AbortController();  
+      try{
+        const response =  apiClient.get<T[]>(this.endpoint, {
+          signal:controller.signal,
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
             "Content-Type": "application/json",
           },
-        });
-        return { req: response.data, cancel: () => controller.abort() }; // Access the data property
-      } catch (error) {
-        if (axios.isCancel(error)) {
-          console.log('Request canceled:', error.message);
-        } else {
-          throw error;
-        }
-        console.log(error);
-        throw error
+        }); 
+        return { req: response, cancel: () => controller.abort() }; // Access the data property
       }
-    }
+       catch (error) {
+        if(error instanceof CanceledError)
+            throw error
+        if(error instanceof DOMException && error.name === 'AbortError')
+          console.log('User Aborted');
+          throw "error in getAll at HttpService"
+    } 
+  }
   
   
     async post(object: T) {
@@ -49,9 +47,8 @@ class HttpService<T extends BaseEntity>{
                 },
               });
               return { req, cancel: () => controller.abort() }; // Return posted data
-        } catch (error: unknown) {
-          if (axios.isCancel(error)) return;
-            throw new Error('Error posting: ' + error);
+        } catch (error) {
+            throw "error in post at HttpService"
         }
       }
         async update(object:T){

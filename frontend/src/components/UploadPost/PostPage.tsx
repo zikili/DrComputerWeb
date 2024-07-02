@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import axios, { CanceledError } from "axios";
 import "./PostPage.css";
 import PostService from "../../services/post-service";
@@ -25,7 +25,9 @@ function PostPage() {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
-
+  const cancelRef=useRef<(() => void | undefined) | undefined>();
+  if(cancelRef.current)
+    cancelRef.current()
   const validateForm = () => {
     let valid = true;
     const errors = {
@@ -82,8 +84,9 @@ function PostPage() {
           image: "image",
           comments: 0,
         };
-        const postResponse = await PostService.post(dataPost);
-        console.log("Upload Successful:", postResponse);
+        const {req,cancel} = await PostService.post(dataPost);
+        cancelRef.current=cancel;
+        console.log("Upload Successful:", req.data);
         setMessage("Upload Successful!");
         setError("");
         navigate("/Home");
@@ -104,6 +107,10 @@ function PostPage() {
       } finally {
         setIsLoading(false);
       }
+    }
+    return () => {
+      if(cancelRef.current)
+        cancelRef.current()
     }
   };
 
@@ -198,8 +205,8 @@ function PostPage() {
             />
             {errors.ram && <small className="error">{errors.ram}</small>}
           </div>
-          <button type="submit" className="btn btn-primary">
-            Upload
+          <button type="submit" className="btn btn-primary" disabled={isLoading}>
+              {isLoading ? "Uploading..." : "Upload"}
           </button>
           {isLoading && <div className="spinner-border text-primary" />}
           {message && <p className="message">{message}</p>}

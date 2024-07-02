@@ -10,7 +10,6 @@ interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
 class ApiClient {
   private static instance: AxiosInstance;
   private static isRefreshing = false;
-  private static refreshPromise: Promise<unknown> | null = null;
   private static requestQueue: Array<{
     resolve: (value: unknown) => void;
     reject: (reason?: unknown) => void;
@@ -37,7 +36,7 @@ class ApiClient {
   public static getInstance(): AxiosInstance {
     if (!ApiClient.instance) {
       ApiClient.instance = axios.create({
-        baseURL: 'http://localhost:3000',
+        baseURL: 'http://localhost:3001',
       });
 
       ApiClient.instance.interceptors.response.use(
