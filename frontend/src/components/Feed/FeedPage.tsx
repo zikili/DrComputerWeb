@@ -2,6 +2,7 @@ import  { useState, useEffect,useRef } from 'react';
 import PostService, { IPost } from '../../services/post-service'; // Adjust the path as per your project structure
 import axios, {  AxiosResponse, CanceledError } from 'axios';
 import './FeedPage.css';
+import React from 'react';
 function FeedPage() {
   const [posts, setPosts] = useState<IPost[]>([]);
   const [isLoading,setIsLoading]=useState(false)
