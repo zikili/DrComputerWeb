@@ -8,6 +8,7 @@ import { CanceledError } from "axios";
 import { useNavigate } from 'react-router-dom';
 import {GoogleLogin, CredentialResponse } from '@react-oauth/google';
 import jwt_decode from 'jwt-decode';
+import React from "react";
 
 const schema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -49,9 +50,10 @@ function LoginForm() {
     try {
       console.log(credentialResponse);
       if(credentialResponse.credential){
-      const decoded:GoogleRes = jwt_decode(credentialResponse.credential);
+      const decoded: GoogleResponse = jwt_decode(credentialResponse.credential);
+
       const dataAuth = {
-        username: decoded.name+"G",
+        username: decoded.name+" G",
         email: decoded.email,
         password: "123456",
         image: decoded.picture
@@ -59,7 +61,10 @@ function LoginForm() {
       try{
         const userService:UserService = new UserService();
         const registerResponse = await userService.registerUser(dataAuth);
+        const dataLogin = {email:dataAuth.email,password:dataAuth.password};
+        const loginResponse = await userService.loginUser(dataLogin);
         console.log("Registration Successful:", registerResponse);
+        console.log("Login Successful:", loginResponse);
       }catch(error){
         console.log(error);
         console.log("User already exists");
@@ -131,11 +136,8 @@ function LoginForm() {
     </div>
   );
 }
-export interface GoogleRes{
-email: string;
-name: string;
-picture: string;
-}
+
 export default LoginForm;
+export interface GoogleResponse{email:string, name:string, picture:string}
 
 
