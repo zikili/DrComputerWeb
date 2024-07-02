@@ -1,8 +1,8 @@
-import React, { useState, useEffect,useRef } from 'react';
+import  { useState, useEffect,useRef } from 'react';
 import PostService, { IPost } from '../../services/post-service'; // Adjust the path as per your project structure
-import axios, {  AxiosResponse } from 'axios';
+import axios, {  AxiosResponse, CanceledError } from 'axios';
 import './FeedPage.css';
-const FeedPage: React.FC = () => {
+function FeedPage() {
   const [posts, setPosts] = useState<IPost[]>([]);
   const [isLoading,setIsLoading]=useState(false)
   const [error, setError] = useState<string|null>(null);
@@ -11,20 +11,29 @@ const FeedPage: React.FC = () => {
   if(cancelRef.current)
     cancelRef.current()
   useEffect(() => {
-
-      const fetchData = async () => {
           try {
             setIsLoading(true);
-              const { req, cancel } = await PostService.getAll(); // Await for the getAll() result
-              cancelRef.current=cancel
-              // Attach the cancel token to the axios request
-              const response: AxiosResponse<IPost[]> = await req;
-              setPosts(response.data);
+               PostService.getAll().then(async (res)=>{
+                cancelRef.current=res.cancel
+                const response: AxiosResponse<IPost[]> =  await res.req;
+                setPosts(response.data);
+              }); // Await for the getAll() result
           } catch (error) {
             
-              if (axios.isCancel(error)) {
-                  console.log('Request canceled:', error.message);
-              } else {
+              if (axios.isCancel(error)||error instanceof CanceledError ) {
+                setIsLoading(false);
+                return 
+              }
+                else if(error instanceof DOMException && error.name === 'AbortError')
+                  {
+                    console.log('Request aborted')
+                    setIsLoading(false);
+                    return () => {
+                      if(cancelRef.current)
+                      cancelRef.current() // Prevent state update on destructed component
+                    };
+                  }
+              else {
                 setError("Error fetching posts")
                   console.error('Error fetching posts:', error);
               }
@@ -32,14 +41,11 @@ const FeedPage: React.FC = () => {
           finally {
             setIsLoading(false);
           }
-      };
+          return () => {
+            if(cancelRef.current)
+            cancelRef.current() // Prevent state update on destructed component
+          };
 
-      fetchData();
-
-      return () => {
-        if(cancelRef.current)
-        cancelRef.current() // Prevent state update on unmounted component
-      };
   }, []); // Include cancelToken in dependencies to handle cleanup correctly
 
   return (
