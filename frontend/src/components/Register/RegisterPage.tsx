@@ -61,7 +61,7 @@ function RegisterPage() {
       const controller = new AbortController();
       setIsLoading(true);
       try {
-        const dataAuth = { image:"image",username,email, password };
+        const dataAuth = { username,email,password,image:"image"};
         const userService:UserService=new UserService();
         const registerResponse = await userService.registerUser(dataAuth);
         const loginResponse =await userService.loginUser({email,password})

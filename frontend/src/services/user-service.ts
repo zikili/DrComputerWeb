@@ -1,3 +1,4 @@
+import { CredentialResponse } from '@react-oauth/google';
 
 import apiClient from "./api-client"
 
@@ -20,6 +21,22 @@ export interface ITokens{
     refreshToken:string
 }
 class UserService{
+
+    jwtAuthentication=(credentialResponse:CredentialResponse)=>{
+        return new Promise<ITokens>((resolve, reject) => {
+            console.log("Registering user...")
+            console.log(credentialResponse.credential)
+            apiClient.post("/auth/googleSignin", {credential:credentialResponse.credential}).then((response) => {
+                console.log("Service response"+response)
+                resolve(response.data)
+            }).catch((error) => {
+                console.log(error)
+                reject(error)
+            })
+        })
+    }
+
+
      registerUser = (user: IUser) => {
     return new Promise<IUser>((resolve, reject) => {
         console.log("Registering user...")
