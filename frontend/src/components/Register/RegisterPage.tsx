@@ -62,33 +62,12 @@ function RegisterPage() {
       setIsLoading(true);
       try {
         const dataAuth = { image:"image",username,email, password };
-        // const dataUser = { _id:username, image: "image" };
-        // const registerResponse = await axios.post(
-        //   "http://localhost:3000/auth/register",
-        //   dataAuth,
-        //   { signal: controller.signal }
-        // );
-        // const loginResponse = await axios.post(
-        //   "http://localhost:3000/auth/login",
-        //   dataAuth,
-        //   { signal: controller.signal }
-        // );
         const userService:UserService=new UserService();
         const registerResponse = await userService.registerUser(dataAuth);
         const loginResponse =await userService.loginUser({email,password})
         console.log("Registration Successful:", registerResponse);
         console.log("Login Successful:", loginResponse);
         setMessage("Registration Successful!");
-        //TODO save accessToken in local storage
-        // const headers = {
-        //   Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        //   "Content-Type": "application/json", // Adjust content type as needed
-        // };
-        // const userResponse = await axios.post(
-        //   "http://localhost:3000/user",
-        //   dataUser,
-        //   { headers, signal: controller.signal }
-        // );
         setError("");
         navigate('/Home');
       } catch (error:unknown) {
@@ -166,8 +145,7 @@ function RegisterPage() {
         {message && <p className="message">{message}</p>}
         {error && <div className="alert alert-danger alert-dismissible fade show">{error}</div>}
       </form>
+      
     </div>
   );
-}
-
-export default RegisterPage;
+} export default RegisterPage;
