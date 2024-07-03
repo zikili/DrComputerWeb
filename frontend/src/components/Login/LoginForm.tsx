@@ -7,6 +7,7 @@ import UserService, { IloginUser } from "../../services/user-service";
 import { CanceledError } from "axios";
 import { useNavigate } from 'react-router-dom';
 import {GoogleLogin, CredentialResponse } from '@react-oauth/google';
+import React from "react";
 
 const schema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -44,15 +45,20 @@ function LoginForm() {
 
   };
 
-  const onSuccess = (credentialResponse: CredentialResponse) => {
+  const onSuccess = async (credentialResponse: CredentialResponse) => {
     try {
-    console.log("Google Error");
-    console.log(credentialResponse);
-    navigate('/Home');
+      console.log(credentialResponse);
+      if(credentialResponse.credential){
+      const userService=new UserService()
+      const decodeRes=await userService.jwtAuthentication(credentialResponse)
+        localStorage.setItem('accessToken',(decodeRes).accessToken)
+        localStorage.setItem('refreshToken', (decodeRes).refreshToken)
+      }
+      navigate('/Home');
     } catch (error) {
       console.log("Failed to sign in with Google, please try again later.");
+    }
   }
-}
 
 
   const onFailure = () =>{
@@ -116,3 +122,6 @@ function LoginForm() {
 }
 
 export default LoginForm;
+export interface GoogleResponse{email:string, name:string, picture:string}
+
+

@@ -3,6 +3,7 @@ import User, { IAuthUser } from "../models/auth_user_model";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Document } from "mongoose";
+import { OAuth2Client } from "google-auth-library";
 
 const register = async (req: Request, res: Response) => {
   const email = req.body.email;
@@ -94,6 +95,37 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
+const client = new OAuth2Client();
+const googleSignin = async (req: Request, res: Response) => {
+  const credential = req.body.credential;
+  try {
+  const ticket = await client.verifyIdToken({
+  idToken: credential,
+  audience: process.env.GOOGLE_CLIENT_ID+".apps.googleusercontent.com",
+  });
+  const payload = ticket.getPayload();
+  console.log(payload);
+  const email = payload?.email;
+ let user = await User.findOne({ 'email': email });
+ if (user == null) {
+ user = await User.create(
+ {
+  'email': email,
+  'image': payload?.picture,
+  'password': 'google-signin',
+  'username':payload.name+" G"
+ });
+ }
+ await user.save
+ const tokens = await generateTokens(user)
+ return res.status(200).send(tokens);
+  
+  } catch (err) {
+  return res.status(400).send("error missing email or password");
+  }
+  
+ }
+ 
 const refresh = async (req: Request, res: Response) => {
   const refreshToken = extractToken(req);
   if (refreshToken == null) {
@@ -181,4 +213,4 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
   });// as { _id: string };
 }
 
-export default { register, login, logout, authMiddleware, refresh };
+export default { register, login, logout, authMiddleware, refresh,googleSignin };

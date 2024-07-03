@@ -5,6 +5,7 @@ import UploadPostForm from "./components/UploadPost/PostPage";
 import HomePage from "./components/Home/HomePage";
 import StartPage from "./components/Start/StartPage";
 import FeedPage from './components/Feed/FeedPage';
+import React from 'react';
 
 function App() {
   return (
