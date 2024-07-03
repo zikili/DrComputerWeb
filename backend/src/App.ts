@@ -1,7 +1,7 @@
 import express, { Express } from "express";
 import cors from "cors";
 const app = express();
-// import userRoute from "./routes/user_route";
+import postCommentRoute from "./routes/post_comment_route";
 import postRoute from "./routes/post_route";
 import authRoute from "./routes/auth_route";
 import env from "dotenv";
@@ -21,7 +21,7 @@ const init = () => {
       app.use(cors());
 
       app.use("/auth", authRoute);
-      // app.use("/user", userRoute);
+      app.use("/post/comment",postCommentRoute)
       app.use("/post", postRoute);
       resolve(app);
     });
