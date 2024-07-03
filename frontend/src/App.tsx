@@ -5,6 +5,7 @@ import UploadPostForm from "./components/UploadPost/PostPage";
 import HomePage from "./components/Home/HomePage";
 import StartPage from "./components/Start/StartPage";
 import FeedPage from './components/Feed/FeedPage';
+import CommentsPage from './components/Comments/CommentsPage';
 import React from 'react';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path="/Login" element={<LoginForm />} />
           <Route path="/Register" element={<RegisterForm />} />
           <Route path="/Post" element={<UploadPostForm />} />
+          <Route path="/Post/Comments" element={<CommentsPage />} />
         </Routes>
       </div>
     </Router>
