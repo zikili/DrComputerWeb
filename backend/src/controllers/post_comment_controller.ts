@@ -1,13 +1,15 @@
-
-import { Request, Response } from "express";
+import { getUserName } from "../controllers/auth_controller";
+import { Response } from "express";
 import BaseController from "./base_controller";
 import PostComment,{ IPostComment } from "../models/post_comment_model";
+import { AuthRequest } from "./auth_controller";
+
 
 class PostCommentController extends BaseController<IPostComment> {
   constructor() {
     super(PostComment);
   }
-  async get(req: Request, res: Response) {
+  async get(req: AuthRequest, res: Response) {
     try{
     if (req.params.id != null) {
       const myObjects = await this.model.find({postId:req.params.id});
@@ -22,5 +24,14 @@ class PostCommentController extends BaseController<IPostComment> {
     res.status(500).send(error);
   }
 }
+
+async post(req: AuthRequest, res: Response) {
+  const _id = req.user._id;
+  req.body.userId = _id;
+  const username:string=await getUserName(req)
+  req.body.userName =username
+  super.post(req, res);
+}
+
 }
 export default new PostCommentController();

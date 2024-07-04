@@ -37,7 +37,7 @@
   textarea#content {
     width: 300%; /* Set width to 100% of parent */
     max-width: 600px; /* Set max width */
-    height: 600px; /* Increase height */
+    height: 100px; /* Increase height */
     resize: none; /* Prevent textarea from being resized */
   }
   

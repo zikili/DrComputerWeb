@@ -195,7 +195,15 @@ const logout = async (req: Request, res: Response) => {
       return res.status(400).send(err.message);
   }
 };
+export const getUserName=async (req: Request):Promise<string> => {
+  try {
+    const user:IAuthUser = await User.findOne({_id:req.body.userId});
+    return (user.username);
+  } catch (err) {
+    return (err.message);
+  }
 
+}
 export type AuthRequest = Request & { user: { _id: string } };
 
 export const authMiddleware = async (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -212,5 +220,6 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
       return next();
   });// as { _id: string };
 }
+
 
 export default { register, login, logout, authMiddleware, refresh,googleSignin };

@@ -19,7 +19,7 @@ function App() {
           <Route path="/Login" element={<LoginForm />} />
           <Route path="/Register" element={<RegisterForm />} />
           <Route path="/Post" element={<UploadPostForm />} />
-          <Route path="/Comments/:postId" element={<CommentsPage />} />
+          <Route path="/post/comments" element={<CommentsPage />} />
         </Routes>
       </div>
     </Router>

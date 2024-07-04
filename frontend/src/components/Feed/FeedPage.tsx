@@ -2,7 +2,6 @@ import  { useState, useEffect,useRef } from 'react';
 import PostService, { IPost } from '../../services/post-service'; // Adjust the path as per your project structure
 import axios, {  AxiosResponse, CanceledError } from 'axios';
 import './FeedPage.css';
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function FeedPage() {
@@ -53,7 +52,7 @@ function FeedPage() {
   }, []); // Include cancelToken in dependencies to handle cleanup correctly
 
   const handlePostClick = (postId: string) => {
-    navigate(`/Comments/${postId}`);
+    navigate(`/post/comments?postId=${postId}`);
   };
 
   return (
