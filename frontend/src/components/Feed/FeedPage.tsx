@@ -3,7 +3,10 @@ import PostService, { IPost } from '../../services/post-service'; // Adjust the 
 import axios, {  AxiosResponse, CanceledError } from 'axios';
 import './FeedPage.css';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 function FeedPage() {
+  const navigate = useNavigate();
   const [posts, setPosts] = useState<IPost[]>([]);
   const [isLoading,setIsLoading]=useState(false)
   const [error, setError] = useState<string|null>(null);
@@ -49,6 +52,10 @@ function FeedPage() {
 
   }, []); // Include cancelToken in dependencies to handle cleanup correctly
 
+  const handlePostClick = (postId: string) => {
+    navigate(`/Comments/${postId}`);
+  };
+
   return (
     <div className="feed-page">
       <h1>All Posts</h1>
@@ -59,7 +66,7 @@ function FeedPage() {
       ) : (
         <div className="posts-list">
           {posts.map((post, index) => (
-            <div key={index} className="post-item">
+            <div key={index} className="post-item" onClick={() => handlePostClick(post._id!)}>
               <h2>{post.type}</h2>
               <p>GPU: {post.gpu}</p>
               <p>CPU: {post.cpu}</p>
