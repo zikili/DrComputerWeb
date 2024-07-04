@@ -21,7 +21,7 @@ const init = () => {
       app.use(cors());
 
       app.use("/auth", authRoute);
-      app.use("/post/comment",postCommentRoute)
+      app.use("/post/comments",postCommentRoute)
       app.use("/post", postRoute);
       resolve(app);
     });

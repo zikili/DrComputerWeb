@@ -63,7 +63,35 @@ class HttpService<T extends BaseEntity>{
             return {request,cancel:()=>controller.abort}
         }
 
-    }   
+
+
+        async getAllById(id:string) {
+          const controller = new AbortController();  
+          try{
+            const response =  apiClient.get<T[]>(this.endpoint + id, {
+              signal:controller.signal,
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                "Content-Type": "application/json",
+              },
+            }); 
+            return { req: response, cancel: () => controller.abort() }; // Access the data property
+          }
+           catch (error) {
+            if(error instanceof CanceledError)throw error
+            if(error instanceof DOMException && error.name === 'AbortError')
+              console.log('User Aborted');
+
+              throw "error fetching data"
+
+        } 
+      }
+    }  
+    
+    
+ 
+
+
 
 const createHttpService=<T extends BaseEntity>(endpoint:string)=>new HttpService<T>(endpoint);
 
