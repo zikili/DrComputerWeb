@@ -13,6 +13,16 @@ class PostController extends BaseController<IPost> {
     req.body.owner = _id;
     super.post(req, res);
   }
+
+  async addComment(postId:string) {
+    try{
+      await Post.updateOne({ _id: postId }, { $inc: { comments: 1 } });
+    }
+    catch(error){
+      console.error('Failed to update comments count:', error);
+      throw new Error('Failed to update comments count');
+    }
+  }
 }
 
 export default new PostController();

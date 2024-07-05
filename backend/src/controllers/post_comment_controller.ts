@@ -1,3 +1,4 @@
+import  PostController  from './post_controller';
 import { getUserName } from "../controllers/auth_controller";
 import { Response } from "express";
 import BaseController from "./base_controller";
@@ -30,6 +31,7 @@ async post(req: AuthRequest, res: Response) {
   req.body.userId = _id;
   const username:string=await getUserName(req)
   req.body.userName =username
+  PostController.addComment(req.body.postId)
   super.post(req, res);
 }
 
