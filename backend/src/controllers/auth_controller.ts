@@ -5,6 +5,23 @@ import jwt from "jsonwebtoken";
 import { Document } from "mongoose";
 import { OAuth2Client } from "google-auth-library";
 
+
+const put = async (req: AuthRequest, res: Response)=> {
+  const myObject = req.body;
+  try {
+      const updatedMyObject = await User.findByIdAndUpdate(
+          myObject._id,
+          myObject,
+          { new: true }
+      );
+      await updatedMyObject.save();
+      res.status(200).json(updatedMyObject);
+  } catch (err) {
+      res.status(500).send(err.message);
+  }
+};
+
+
 const register = async (req: Request, res: Response) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -31,6 +48,8 @@ const register = async (req: Request, res: Response) => {
     return res.status(400).send(err.message);
   }
 };
+
+
 
 const generateTokens = async (
   user: Document<unknown, object, IAuthUser> &
@@ -202,7 +221,6 @@ export const getUserName=async (req: Request):Promise<string> => {
   } catch (err) {
     return (err.message);
   }
-
 }
 export type AuthRequest = Request & { user: { _id: string } };
 
@@ -222,4 +240,5 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
 }
 
 
-export default { register, login, logout, authMiddleware, refresh,googleSignin };
+
+export default { put,register, login, logout, authMiddleware, refresh,googleSignin };

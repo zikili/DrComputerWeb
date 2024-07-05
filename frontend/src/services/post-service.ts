@@ -19,7 +19,6 @@ export interface IPost {
     ram: string;
     image: string;
     comments: number;
-
 }
 export{CanceledError}
 

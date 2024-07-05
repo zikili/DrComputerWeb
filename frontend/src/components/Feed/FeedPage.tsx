@@ -52,7 +52,7 @@ function FeedPage() {
   }, []); // Include cancelToken in dependencies to handle cleanup correctly
 
   const handlePostClick = (postId: string) => {
-    navigate(`/post/comments?postId=${postId}`);
+    navigate(`/Post/Comments?postId=${postId}`);
   };
 
   return (
@@ -72,6 +72,7 @@ function FeedPage() {
               <p>Motherboard: {post.motherboard}</p>
               <p>Memory: {post.memory}</p>
               <p>RAM: {post.ram}</p>
+              <p>comments: {post.comments}</p>
               <img src={post.image} alt="Post Image" />
             </div>
           ))}

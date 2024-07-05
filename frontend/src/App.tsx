@@ -7,6 +7,8 @@ import StartPage from "./components/Start/StartPage";
 import FeedPage from './components/Feed/FeedPage';
 import CommentsPage from './components/Comments/CommentsPage';
 import React from 'react';
+import EditPostPage from './components/EditPost/EditPostPage';
+import MyPostsPage from './components/MyPosts/MyPostsPage';
 
 function App() {
   return (
@@ -19,7 +21,9 @@ function App() {
           <Route path="/Login" element={<LoginForm />} />
           <Route path="/Register" element={<RegisterForm />} />
           <Route path="/Post" element={<UploadPostForm />} />
-          <Route path="/post/comments" element={<CommentsPage />} />
+          <Route path="/Post/Comments" element={<CommentsPage />} />
+          <Route path="/Post/Edit" element={<EditPostPage />} />
+          <Route path="/Profile/MyPosts" element={<MyPostsPage />} />
         </Routes>
       </div>
     </Router>
