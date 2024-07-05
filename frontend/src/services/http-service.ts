@@ -53,17 +53,36 @@ class HttpService<T extends BaseEntity>{
       }
         async update(object:T){
             const controller=new AbortController();
-            const request= await apiClient.put<T[]>(this.endpoint+object._id,object,{signal:controller.signal})
-            return {request,cancel:()=>controller.abort}
+            try {
+              const req = await apiClient.post<T>(this.endpoint+object._id , object, {
+                  signal: controller.signal,
+                  headers: {
+                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                    "Content-Type": "application/json",
+                  },
+                });
+                return { req, cancel: () => controller.abort() }; // Return posted data
+          } catch (error) {
+              throw "error in post at HttpService"
+          }
         }
+
         
         async delete(id:string){
             const controller=new AbortController();
-            const request= await apiClient.delete<T[]>(this.endpoint + id,{signal:controller.signal})
-            return {request,cancel:()=>controller.abort}
+            try {
+              const req = await apiClient.delete<T>(this.endpoint+id, {
+                  signal: controller.signal,
+                  headers: {
+                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                    "Content-Type": "application/json",
+                  },
+                });
+                return { req, cancel: () => controller.abort() }; // Return posted data
+          } catch (error) {
+              throw "error in delete at HttpService"
+          }
         }
-
-
 
         async getAllById(id:string) {
           const controller = new AbortController();  
@@ -80,8 +99,11 @@ class HttpService<T extends BaseEntity>{
            catch (error) {
             if(error instanceof CanceledError)throw error
             if(error instanceof DOMException && error.name === 'AbortError')
+            {
               console.log('User Aborted');
-
+              controller.abort();
+            }
+        
               throw "error fetching data"
 
         } 
@@ -90,9 +112,6 @@ class HttpService<T extends BaseEntity>{
     
     
  
-
-
-
 const createHttpService=<T extends BaseEntity>(endpoint:string)=>new HttpService<T>(endpoint);
 
 export default createHttpService;
