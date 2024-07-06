@@ -21,7 +21,7 @@
   padding: 20px;
   border-top: 1px solid #ddd;
   background-color: #ffffff;
-  height: 200px; /* Increased height for the form section */
+  height: 250px; /* Increased height for the form section */
   box-sizing: border-box; /* Ensure padding and border are included in the height */
   display: flex;
   justify-content: center; /* Center content horizontally */
