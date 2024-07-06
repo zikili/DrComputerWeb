@@ -35,8 +35,6 @@ function CommentsPage() {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (postId) {
-      console.log('handleSubmit triggered');
-      console.log('postId is ' + postId);
       setIsLoading(true);
       const newComment: IPostComment = {
         content,

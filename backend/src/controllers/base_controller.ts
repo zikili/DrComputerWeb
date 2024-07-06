@@ -10,12 +10,13 @@ class BaseController<ModelInterface>{
 
     async get(req: Request, res: Response) {
         try {
+
             if (req.params.id != null) {
                 const myObjects = await this.model.findById(req.params.id);
                 return res.status(200).send(myObjects);
             } else {
-                if (req.query.name != null) {
-                    const myObjects = await this.model.find({ name: req.query.name });
+                if (req.query.userId != null) {
+                    const myObjects = await this.model.find({ owner: req.query.userId });
                     return res.status(200).send(myObjects);
                 } else {
                     const myObjects = await this.model.find();
@@ -54,10 +55,9 @@ class BaseController<ModelInterface>{
         }
     }
 
-    delete(req: Request, res: Response) {
-        //const student = req.body;
+    async delete(req: Request, res: Response) {
         try {
-            //await this.model.findByIdAndDelete(student._id);
+            await this.model.findByIdAndDelete(req.body.id);
             res.status(200).send();
         } catch (err) {
             res.status(500).send(err.message);

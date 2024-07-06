@@ -1,9 +1,15 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import "./EditPostPage.css";
-import { IPost } from "../../services/post-service";
+import PostService, { IPost } from "../../services/post-service";
+import { AxiosResponse } from "axios";
 
 function EditPostPage() {
+  const [error, setError] = useState<string | null>(null);
+  const cancelRef = useRef<(() => void | undefined) | undefined>();
+  const [searchParams] = useSearchParams();
+  const postId = searchParams.get("postId");
+  const [post, setPost] = useState<IPost | null>(null);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     type: "",
@@ -23,6 +29,33 @@ function EditPostPage() {
     ram: "",
     image: "",
   });
+
+  useEffect(() => {
+    // Fetch post data based on postId when component mounts
+    const fetchPost = async () => {
+      try {
+        const res = await PostService.getOneById("/" + postId); // Example method to fetch post by ID from service
+        cancelRef.current = res.cancel;
+        const response: AxiosResponse<IPost> = await res.req;
+        setPost(response.data);
+        setFormData({
+          type: response.data.type,
+          gpu: response.data.gpu,
+          cpu: response.data.cpu,
+          motherboard: response.data.motherboard,
+          memory: response.data.memory,
+          ram: response.data.ram,
+          image: response.data.image,
+        });
+      } catch (error) {
+        console.error("Error fetching original post:", error);
+      }
+    };
+
+    if (postId) {
+      fetchPost();
+    }
+  }, [postId]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -57,13 +90,25 @@ function EditPostPage() {
     return valid;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
       console.log("Submitted", formData);
-      // TODO: add service call here
-      //service should take send with update with the postId url part
-      navigate("/");
+      if (post) {
+        const editedPost: IPost & { _id: string; comments: number } = {
+          ...formData,
+          _id: postId!,
+          comments: post.comments,
+        };
+        try {
+          const res = await PostService.update(editedPost,'?postId=');
+          cancelRef.current = res.cancel;
+          navigate("/Profile/MyPosts?userId="+post.owner);
+        } catch (error) {
+          console.error("Error updating post:", error);
+          setError("An error occurred while updating the post.");
+        }
+      }
     }
   };
 
@@ -107,6 +152,7 @@ function EditPostPage() {
             Update
           </button>
         </div>
+        {error && <div className="alert alert-danger">{error}</div>}
       </form>
     </div>
   );
