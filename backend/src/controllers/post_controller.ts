@@ -2,6 +2,7 @@ import Post, { IPost } from "../models/post_model";
 import BaseController from "./base_controller";
 import { Response } from "express";
 import { AuthRequest } from "./auth_controller";
+import post_comment_controller from "./post_comment_controller";
 
 class PostController extends BaseController<IPost> {
   constructor() {
@@ -23,6 +24,14 @@ class PostController extends BaseController<IPost> {
       throw new Error('Failed to update comments count');
     }
   }
+
+  async delete(req: AuthRequest, res: Response)
+  {
+    post_comment_controller.deleteMany(req,res)
+
+    super.delete(req, res);
+  }
+
 }
 
 export default new PostController();
