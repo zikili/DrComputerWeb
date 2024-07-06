@@ -1,6 +1,6 @@
 import  PostController  from './post_controller';
 import { getUserName } from "../controllers/auth_controller";
-import { Response } from "express";
+import { Request, Response } from "express";
 import BaseController from "./base_controller";
 import PostComment,{ IPostComment } from "../models/post_comment_model";
 import { AuthRequest } from "./auth_controller";
@@ -35,5 +35,16 @@ async post(req: AuthRequest, res: Response) {
   super.post(req, res);
 }
 
+async deleteMany(req: Request, res: Response) {
+  const postId=req.body.id
+  try{
+    await this.model.deleteMany({postId:postId});
+    res.status(200).send();
+  }
+  catch(error)
+  {
+    res.status(500).send(error);
+  }
+}
 }
 export default new PostCommentController();
