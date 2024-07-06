@@ -6,7 +6,6 @@ import HomePage from "./components/Home/HomePage";
 import StartPage from "./components/Start/StartPage";
 import FeedPage from './components/Feed/FeedPage';
 import CommentsPage from './components/Comments/CommentsPage';
-import React from 'react';
 import EditPostPage from './components/EditPost/EditPostPage';
 import MyPostsPage from './components/MyPosts/MyPostsPage';
 

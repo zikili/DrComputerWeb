@@ -8,7 +8,7 @@ interface BaseEntity{
 }
 
 //Base Service
-class HttpService<T extends BaseEntity>{
+export class HttpService<T extends BaseEntity>{
     endpoint:string;
     constructor(endpoint:string){
         this.endpoint=endpoint;
@@ -51,10 +51,10 @@ class HttpService<T extends BaseEntity>{
             throw "error in post at HttpService"
         }
       }
-        async update(object:T){
+        async update(object:T,param?:string){
             const controller=new AbortController();
             try {
-              const req = await apiClient.post<T>(this.endpoint+object._id , object, {
+              const req = await apiClient.put<T>(this.endpoint+param+object._id , object, {
                   signal: controller.signal,
                   headers: {
                     Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -63,7 +63,7 @@ class HttpService<T extends BaseEntity>{
                 });
                 return { req, cancel: () => controller.abort() }; // Return posted data
           } catch (error) {
-              throw "error in post at HttpService"
+              throw "error in put at HttpService"
           }
         }
 
@@ -71,12 +71,13 @@ class HttpService<T extends BaseEntity>{
         async delete(id:string){
             const controller=new AbortController();
             try {
-              const req = await apiClient.delete<T>(this.endpoint+id, {
+              const req = await apiClient.delete<T>(this.endpoint, {
                   signal: controller.signal,
                   headers: {
                     Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
                     "Content-Type": "application/json",
                   },
+                  data:{id}
                 });
                 return { req, cancel: () => controller.abort() }; // Return posted data
           } catch (error) {
@@ -97,6 +98,28 @@ class HttpService<T extends BaseEntity>{
             return { req: response, cancel: () => controller.abort() }; // Access the data property
           }
            catch (error) {
+            if(error instanceof CanceledError)throw "cancelled"
+            if(error instanceof DOMException && error.name === 'AbortError')
+            {
+              console.log('User Aborted');
+            }
+        
+              throw "error fetching data"
+        } 
+      }
+      async getOneById(id:string) {
+        const controller = new AbortController();  
+          try{
+            const response =  apiClient.get<T>(this.endpoint + id, {
+              signal:controller.signal,
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                "Content-Type": "application/json",
+              },
+            }); 
+            return { req: response, cancel: () => controller.abort() }; // Access the data property
+          }
+           catch (error) {
             if(error instanceof CanceledError)throw error
             if(error instanceof DOMException && error.name === 'AbortError')
             {
@@ -108,6 +131,7 @@ class HttpService<T extends BaseEntity>{
 
         } 
       }
+      
     }  
     
     
