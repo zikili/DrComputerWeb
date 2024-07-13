@@ -14,10 +14,10 @@ export class HttpService<T extends BaseEntity>{
         this.endpoint=endpoint;
     }
 
-    async getAll() {
+    async getAll(param:string="") {
       const controller = new AbortController();  
       try{
-        const response =  apiClient.get<T[]>(this.endpoint, {
+        const response =  apiClient.get<T[]>(this.endpoint+param, {
           signal:controller.signal,
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -107,31 +107,6 @@ export class HttpService<T extends BaseEntity>{
               throw "error fetching data"
         } 
       }
-      async getOneById(id:string) {
-        const controller = new AbortController();  
-          try{
-            const response =  apiClient.get<T>(this.endpoint + id, {
-              signal:controller.signal,
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-                "Content-Type": "application/json",
-              },
-            }); 
-            return { req: response, cancel: () => controller.abort() }; // Access the data property
-          }
-           catch (error) {
-            if(error instanceof CanceledError)throw error
-            if(error instanceof DOMException && error.name === 'AbortError')
-            {
-              console.log('User Aborted');
-              controller.abort();
-            }
-        
-              throw "error fetching data"
-
-        } 
-      }
-      
     }  
     
     

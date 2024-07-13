@@ -62,7 +62,10 @@ function FeedPage() {
         <div className="spinner-border text-primary" />
       ) : error ? (
         <div className="alert alert-danger">{error}</div>
+      ) : posts?.length === 0 ? (
+        <div className="no-posts"><h3>No posts have been uploaded.</h3></div>
       ) : (
+        
         <div className="posts-list">
           {posts.map((post, index) => (
             <div key={index} className="post-item" onClick={() => handlePostClick(post._id!)}>

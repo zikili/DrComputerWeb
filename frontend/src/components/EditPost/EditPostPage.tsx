@@ -1,15 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./EditPostPage.css";
 import PostService, { IPost } from "../../services/post-service";
-import { AxiosResponse } from "axios";
 
 function EditPostPage() {
+  const location = useLocation();
+  const post = location.state as { post: IPost }
   const [error, setError] = useState<string | null>(null);
   const cancelRef = useRef<(() => void | undefined) | undefined>();
-  const [searchParams] = useSearchParams();
-  const postId = searchParams.get("postId");
-  const [post, setPost] = useState<IPost | null>(null);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     type: "",
@@ -31,31 +29,18 @@ function EditPostPage() {
   });
 
   useEffect(() => {
-    // Fetch post data based on postId when component mounts
-    const fetchPost = async () => {
-      try {
-        const res = await PostService.getOneById("/" + postId); // Example method to fetch post by ID from service
-        cancelRef.current = res.cancel;
-        const response: AxiosResponse<IPost> = await res.req;
-        setPost(response.data);
-        setFormData({
-          type: response.data.type,
-          gpu: response.data.gpu,
-          cpu: response.data.cpu,
-          motherboard: response.data.motherboard,
-          memory: response.data.memory,
-          ram: response.data.ram,
-          image: response.data.image,
-        });
-      } catch (error) {
-        console.error("Error fetching original post:", error);
-      }
-    };
-
-    if (postId) {
-      fetchPost();
+    if (post) {
+      setFormData({
+        type:post.post.type,
+        gpu: post.post.gpu,
+        cpu: post.post.cpu,
+        motherboard: post.post.motherboard,
+        memory: post.post.memory,
+        ram: post.post.ram,
+        image: post.post.image,
+      });
     }
-  }, [postId]);
+  }, [post]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -97,13 +82,14 @@ function EditPostPage() {
       if (post) {
         const editedPost: IPost & { _id: string; comments: number } = {
           ...formData,
-          _id: postId!,
-          comments: post.comments,
+          _id: post.post._id!,
+          comments: post.post.comments,
+          owner: post.post.owner,  // Ensure you include the owner field if it's needed
         };
         try {
-          const res = await PostService.update(editedPost,'?postId=');
+          const res = await PostService.update(editedPost, '?postId=');
           cancelRef.current = res.cancel;
-          navigate("/Profile/MyPosts?userId="+post.owner);
+          navigate("/Profile/MyPosts?userId=" + post.post.owner);
         } catch (error) {
           console.error("Error updating post:", error);
           setError("An error occurred while updating the post.");

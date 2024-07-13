@@ -31,7 +31,11 @@ class PostController extends BaseController<IPost> {
 
     super.delete(req, res);
   }
-
+  async getMyPosts(req: AuthRequest, res: Response) {
+    const owner= req.user._id;
+    const posts = await Post.find({ owner: owner });
+    res.status(200).send(posts);
+  }
 }
 
 export default new PostController();

@@ -103,7 +103,7 @@ import { authMiddleware } from "../controllers/auth_controller";
  *              image: 'image'
  *              comments: []
  */
-
+router.get("/getMyPosts", authMiddleware, PostController.getMyPosts.bind(PostController))
 router.get("/", authMiddleware, PostController.get.bind(PostController));
 router.get("/:id", authMiddleware, PostController.get.bind(PostController));
 
