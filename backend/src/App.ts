@@ -4,6 +4,7 @@ const app = express();
 import postCommentRoute from "./routes/post_comment_route";
 import postRoute from "./routes/post_route";
 import authRoute from "./routes/auth_route";
+import fileRoute from "./routes/file_route";
 import env from "dotenv";
 env.config();
 
@@ -23,6 +24,8 @@ const init = () => {
       app.use("/auth", authRoute);
       app.use("/post/comments",postCommentRoute)
       app.use("/post", postRoute);
+      app.use("/file", fileRoute);
+      app.use("/public", express.static("public"));
       resolve(app);
     });
   });
