@@ -4,25 +4,18 @@ import { CanceledError } from 'axios';
 // import UserService from './user-service';
 import createHttpService from './http-service';
 
+
 export interface IPostComment {
-    userId: string;
+    _id?:string
+    postId: string;
+    userId?: string;
     content: string;
-}
-export interface IPost {
-    _id?: string;
-    owner?: string;
-    type: string;
-    gpu: string;
-    cpu: string;
-    motherboard: string;
-    memory: string;
-    ram: string;
-    image: string;
-    comments: number;
+    userName?:string;
 }
 export{CanceledError}
 
-const PostService = createHttpService<IPost>('/post');
+const PostCommentService = createHttpService<IPostComment>('/post/comments');
 
 
-export default PostService;
+
+export default PostCommentService;

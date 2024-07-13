@@ -2,7 +2,6 @@ import  { useState, useEffect,useRef } from 'react';
 import PostService, { IPost } from '../../services/post-service'; // Adjust the path as per your project structure
 import axios, {  AxiosResponse, CanceledError } from 'axios';
 import './FeedPage.css';
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function FeedPage() {
@@ -53,7 +52,7 @@ function FeedPage() {
   }, []); // Include cancelToken in dependencies to handle cleanup correctly
 
   const handlePostClick = (postId: string) => {
-    navigate(`/Comments/${postId}`);
+    navigate(`/Post/Comments?postId=${postId}`);
   };
 
   return (
@@ -63,7 +62,10 @@ function FeedPage() {
         <div className="spinner-border text-primary" />
       ) : error ? (
         <div className="alert alert-danger">{error}</div>
+      ) : posts?.length === 0 ? (
+        <div className="no-posts"><h3>No posts have been uploaded.</h3></div>
       ) : (
+        
         <div className="posts-list">
           {posts.map((post, index) => (
             <div key={index} className="post-item" onClick={() => handlePostClick(post._id!)}>
@@ -73,6 +75,7 @@ function FeedPage() {
               <p>Motherboard: {post.motherboard}</p>
               <p>Memory: {post.memory}</p>
               <p>RAM: {post.ram}</p>
+              <p>comments: {post.comments}</p>
               <img src={post.image} alt="Post Image" />
             </div>
           ))}

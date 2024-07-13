@@ -1,26 +1,32 @@
-/* FeedPage.css */
-
 .feed-page {
-    padding: 20px;
-  }
-  
-  .posts-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  .post-item {
-    border: 1px solid #ccc;
-    padding: 15px;
-    border-radius: 5px;
-    width: 300px;
-  }
-  
-  .post-item img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin-top: 10px;
-  }
-  
+  max-width:calc(2 * (300px + 15px * 2));/*2 items*/
+   margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center; 
+}
+
+.posts-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center; 
+  max-width: 100%; 
+}
+
+.post-item {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 5px;
+  width: 300px;
+  max-width: 100%; 
+}
+
+.post-item img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-top: 10px;
+}

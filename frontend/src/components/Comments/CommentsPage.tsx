@@ -1,67 +1,76 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import axios, { AxiosResponse } from 'axios';
-//import PostService, { IComment } from '../../services/post-service'; // Adjust the path as per your project structure
-import './CommentsPage.css'; // Create and style this CSS file
+import React, { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { AxiosResponse } from 'axios';
+import './CommentsPage.css'; // Ensure this file is created and properly styled
+import PostCommentService, { IPostComment } from '../../services/comment-service';
 
 function CommentsPage() {
-  const { postId } = useParams<{ postId: string }>();
-  //const [comments, setComments] = useState<IComment[]>([]);
+  const [searchParams] = useSearchParams();
+  const postId = searchParams.get('postId');
+  const [comments, setComments] = useState<IPostComment[]>([]);
   const [content, setContent] = useState('');
+  const cancelRef = useRef<(() => void | undefined) | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // if (postId) {
-    //   setIsLoading(true);
-    //   PostService.getCommentsByPostId(postId)
-    //     .then((response: AxiosResponse<IComment[]>) => {
-    //       setComments(response.data);
-    //     })
-    //     .catch((error) => {
-    //       setError("Error fetching comments");
-    //       console.error('Error fetching comments:', error);
-    //     })
-    //     .finally(() => {
-    //       setIsLoading(false);
-    //     });
-    // }
+    if (postId) {
+      setIsLoading(true);
+      PostCommentService.getAllById("/" + postId)
+        .then(async (res) => {
+          cancelRef.current = res.cancel;
+          const response: AxiosResponse<IPostComment[]> = await res.req;
+          setComments(response.data);
+        })
+        .catch((error) => {
+          setError('Error fetching comments');
+          console.error('Error fetching comments:', error);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   }, [postId]);
 
-  const handleSubmit = (event: React.FormEvent) => {
-    // event.preventDefault();
-    // if (postId) {
-    //   setIsLoading(true);
-    //   PostService.addComment(postId, { content })
-    //     .then((response: AxiosResponse<IComment>) => {
-    //       setComments([...comments, response.data]);
-    //       setContent('');
-    //     })
-    //     .catch((error) => {
-    //       setError("Error adding comment");
-    //       console.error('Error adding comment:', error);
-    //     })
-    //     .finally(() => {
-    //       setIsLoading(false);
-    //     });
-    // }
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (postId) {
+      setIsLoading(true);
+      const newComment: IPostComment = {
+        content,
+        postId,
+      };
+      PostCommentService.post(newComment)
+        .then(async (res) => {
+          cancelRef.current = res.cancel;
+          const response: AxiosResponse<IPostComment> = await res.req;
+          setContent('');
+          setComments([...comments, response.data]);
+        })
+        .catch((error) => {
+          setError('Error adding comment');
+          console.error('Error adding comment:', error);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   };
 
   return (
     <div className="comments-page">
       <div className="comments-section">
-        {/* Commented out loading and error handling for now */}
-        {/* {isLoading ? (
+        {isLoading ? (
           <div className="spinner-border text-primary" />
         ) : error ? (
           <div className="alert alert-danger">{error}</div>
         ) : (
           comments.map((comment, index) => (
             <div key={index} className="comment-item">
-              <p>{comment.content}</p>
+              <p><strong>{comment.userName}:</strong> {comment.content}</p>
             </div>
           ))
-        )} */}
+        )}
       </div>
       <div className="comment-form-section">
         <form onSubmit={handleSubmit}>
