@@ -38,15 +38,13 @@
     border-radius: 4px;
 }
 
-/* Input focus styling */
 .form-control:focus {
     border-color: #007bff;
     outline: none;
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
-/* Button styling */
-.btn {
+  .btn {
     width: 100%;
     padding: 10px;
     background-color: #007bff;
@@ -56,8 +54,7 @@
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
-}
-
+  }
 /* Button hover effect */
 .btn:hover {
     background-color: #0056b3;
@@ -80,11 +77,11 @@
     margin-bottom: 20px;
 }
 .btn-square {
-    width: 40px; /* Adjust as needed for your square button size */
-    height: 40px; /* Adjust as needed for your square button size */
+    width: 40px;
+    height: 40px;
   }
   
-  /* Optional: Center icon inside square button */
   .btn-square .fa-xl {
     margin: auto;
   }
+

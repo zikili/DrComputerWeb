@@ -170,9 +170,11 @@ function RegisterPage() {
             <small className="error">{errors.password}</small>
           )}
         </div>
-        <button type="submit" className="btn btn-primary">
+        <div className="row d-flex justify-content-center align-content-center "  >
+        <button type="submit" className="btn btn-block btn-primary">
           Register
         </button>
+        </div>
         {isLoading && <div className="spinner-border text-primary" />}
         {message && <p className="message">{message}</p>}
         {error && <div className="alert alert-danger alert-dismissible fade show">{error}</div>}
