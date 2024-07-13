@@ -1,34 +1,34 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./ProfilePage.css";
-import UserService from "../../services/user-service";
+import UserService, { IProfile} from "../../services/user-service";
 
 function ProfilePage() {
-  const [profile, setProfile] = useState({
-    profileImage: "",
+  const [profile, setProfile] = useState<IProfile>({
     username: "",
     email: "",
-    password: "",
+    image: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
 
   useEffect(() => {
-    // const fetchProfile = async () => {
-    //   setIsLoading(true);
-    //   try {
-    //     const userService: UserService = new UserService();
-    //     const profileData = await userService.();
-    //     setProfile(profileData);
-    //     setError("");
-    //   } catch (error: unknown) {
-    //     console.error("Profile Error:", error);
-    //     setError("An error occurred while fetching the profile. Please try again later.");
-    //   } finally {
-    //     setIsLoading(false);
-    //   }
-    // };
-    //fetchProfile();
+    const fetchProfile = async () => {
+      setIsLoading(true);
+      try {
+        const userService: UserService = new UserService();
+        const profileData = await userService.getUserProfile(); 
+        setProfile(profileData);
+        setError("");
+      } catch (error: unknown) {
+        console.error("Profile Error:", error);
+        setError("An error occurred while fetching the profile. Please try again later.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProfile();
   }, []);
 
   return (
@@ -40,7 +40,7 @@ function ProfilePage() {
         <div className="spinner-border text-primary" />
       ) : (
         <div className="profile-container">
-          <img src={profile.profileImage} alt="Profile" className="profile-image" />
+          <img src={profile.image} alt="Profile" className="profile-image" />
           <div className="profile-info">
             <div className="profile-field">
               <label>Username:</label>
@@ -49,10 +49,6 @@ function ProfilePage() {
             <div className="profile-field">
               <label>Email:</label>
               <span>{profile.email}</span>
-            </div>
-            <div className="profile-field">
-              <label>Password:</label>
-              <span>{profile.password}</span>
             </div>
           </div>
           {error && <div className="alert alert-danger alert-dismissible fade show">{error}</div>}
