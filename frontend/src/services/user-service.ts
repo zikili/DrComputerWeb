@@ -12,6 +12,12 @@ export interface IUser {
     refreshToken?: string
 }
 
+export interface IProfile {
+    email: string,
+    username:string
+    image: string,
+}
+
 export interface IloginUser{
     email:string,
     password:string
@@ -36,6 +42,21 @@ class UserService{
         })
     }
 
+    getUserProfile = () => {
+        return new Promise<IProfile>((resolve, reject) => {
+            console.log("Get Info user...")
+            apiClient.get("/auth/info",{headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                "Content-Type": "application/json",
+              }}).then((response) => {
+                console.log(response)
+                resolve(response.data)
+            }).catch((error) => {
+                console.log(error)
+                reject(error)
+            })
+        })
+    }
 
      registerUser = (user: IUser) => {
     return new Promise<IUser>((resolve, reject) => {
