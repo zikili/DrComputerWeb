@@ -84,6 +84,21 @@ const generateTokens = async (
     return null;
   }
 };
+
+const getProfile = async (req: AuthRequest, res: Response) => {
+  const userId = req.user._id;
+  try {
+    const user = await User.findOne({ _id: userId });
+    if (user == null) {
+      return res.status(400).send("User does not exists");
+    }
+    const profileUser = {username:user.username,email:user.email,image:user.image}
+    return res.status(200).send(profileUser);
+}catch (err) {
+  return res.status(400).send(err.message);
+}
+}
+
 const login = async (req: Request, res: Response) => {
   // get email & pwd
   const email = req.body.email;
@@ -239,6 +254,4 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
   });// as { _id: string };
 }
 
-
-
-export default { put,register, login, logout, authMiddleware, refresh,googleSignin };
+export default { put,register, login, logout, authMiddleware, refresh,googleSignin , getProfile };
