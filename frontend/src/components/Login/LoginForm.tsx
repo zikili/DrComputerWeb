@@ -7,7 +7,6 @@ import UserService, { IloginUser } from "../../services/user-service";
 import { CanceledError } from "axios";
 import { useNavigate } from 'react-router-dom';
 import {GoogleLogin, CredentialResponse } from '@react-oauth/google';
-import React from "react";
 
 const schema = z.object({
   email: z.string().email({ message: "Invalid email address" }),

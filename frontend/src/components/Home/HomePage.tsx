@@ -3,7 +3,6 @@ import { useState } from "react";
 import UserService from "../../services/user-service";
 import './HomePage.css';
 import { CanceledError } from 'axios';
-import React from 'react';
 
 function HomePage() {
   const navigate = useNavigate();
@@ -29,9 +28,9 @@ function HomePage() {
     <div className="home-container">
       <h1>Home Page</h1>
       <div className="button-container">
-        <button className="postBTN" onClick={() => navigate('/Post')}>Post</button>
-        <button className="feedBTN" onClick={() => navigate('/Feed')}>Feed</button>
-        <button className="profileBTN" onClick={() => navigate('/Profile')}>Profile</button>
+        <button className="postBTN myButton" onClick={() => navigate('/Post')}>Post</button>
+        <button className="feedBTN myButton" onClick={() => navigate('/Feed')}>Feed</button>
+        <button className="profileBTN myButton" onClick={() => navigate('/Profile')}>Profile</button>
         <button className="logoutBTN" onClick={async () => await logoutFunction()}>LogOut</button>
       </div>
       <div>

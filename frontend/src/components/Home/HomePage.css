@@ -15,20 +15,6 @@
     margin-top: 20px;
 }
 
-.postBTN {
-    padding: 10px 20px;
-    font-size: 18px;
-    color: white;
-    background-color: #007bff; /* Blue color */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.postBTN:hover {
-    background-color: #0056b3; /* Darker blue color on hover */
-}
 
 .logoutBTN {
     padding: 10px 20px;
@@ -45,7 +31,11 @@
     background-color: darkred; /* Darker red color on hover */
 }
 
-.feedBTN {
+.myButton:hover {
+    background-color: #0056b3; /* Darker blue color on hover */
+}
+
+.myButton{
     padding: 10px 20px;
     font-size: 18px;
     color: white;
@@ -54,8 +44,4 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-}
-
-.feedBTN:hover {
-    background-color: #0056b3; /* Darker blue color on hover */
 }

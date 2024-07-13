@@ -18,6 +18,7 @@ function ProfilePage() {
       try {
         const userService: UserService = new UserService();
         const profileData = await userService.getUserProfile(); 
+        console.log(profileData);
         setProfile(profileData);
         setError("");
       } catch (error: unknown) {
