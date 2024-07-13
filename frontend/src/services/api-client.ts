@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosError, AxiosRequestConfig } from "axios";
 import UserService from "./user-service";
+const apiKey=import.meta.env.VITE_API_BASE_URL
 
 export { CanceledError } from "axios";
 
@@ -36,7 +37,7 @@ class ApiClient {
   public static getInstance(): AxiosInstance {
     if (!ApiClient.instance) {
       ApiClient.instance = axios.create({
-        baseURL: 'http://localhost:3001',
+        baseURL: apiKey,
       });
 
       ApiClient.instance.interceptors.response.use(

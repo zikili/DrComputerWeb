@@ -4,13 +4,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./RegisterPage.css";
 import UserService from "../../services/user-service";
 import { useNavigate } from 'react-router-dom';
-import avatar from '../../assets/avatar.jpeg';
 import { uploadPhoto } from "../../services/file-service";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 
 
 function RegisterPage() {
+  const img="/src/assets/avatar.jpg"
   const navigate = useNavigate();
   const [imgSrc, setImgSrc] = useState<File>()
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -82,7 +82,9 @@ function RegisterPage() {
       const controller = new AbortController();
       setIsLoading(true);
       try {
-        const image = await uploadPhoto(imgSrc!);
+        let image=img;
+        if(imgSrc)
+          image = await uploadPhoto(imgSrc!);
         console.log("upload returned:" + image);
         const registerData = { username,email,password,image};
         const userService:UserService=new UserService();
@@ -114,12 +116,12 @@ function RegisterPage() {
       </div>
       <form className="register-form" onSubmit={onSubmit}>
       <div className="d-flex justify-content-center position-relative">
-        <img src={imgSrc ? URL.createObjectURL(imgSrc) : avatar} style={{ height: "230px", width: "230px" }} className="img-fluid" />
-        <button type="button" className="btn position-absolute bottom-0 end-0" onClick={selectImg}>
-          <FontAwesomeIcon icon={faImage} className="fa-xl" />
+        <img src={imgSrc ? URL.createObjectURL(imgSrc) : img} style={{ height: "230px", width: "230px" }} className="img-fluid" />
+        <button type="button" className="btn-square position-absolute bottom-0 end-0" onClick={selectImg}>
+            <FontAwesomeIcon icon={faImage} className="fa-xl" />
         </button>
       </div>
-            <input style={{ display: "none" }} ref={fileInputRef} type="file" onChange={imgSelected}></input>
+        <input style={{ display: "none" }} ref={fileInputRef} type="file" onChange={imgSelected}></input>
         <div className="form-group">
           <label htmlFor="username" className="form-label">
             Username:

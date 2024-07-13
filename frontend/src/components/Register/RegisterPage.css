@@ -79,3 +79,12 @@
 .register-header {
     margin-bottom: 20px;
 }
+.btn-square {
+    width: 40px; /* Adjust as needed for your square button size */
+    height: 40px; /* Adjust as needed for your square button size */
+  }
+  
+  /* Optional: Center icon inside square button */
+  .btn-square .fa-xl {
+    margin: auto;
+  }
