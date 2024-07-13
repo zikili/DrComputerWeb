@@ -89,7 +89,7 @@ function EditPostPage() {
         try {
           const res = await PostService.update(editedPost, '?postId=');
           cancelRef.current = res.cancel;
-          navigate("/Profile/MyPosts?userId=" + post.post.owner);
+          navigate("/Profile/MyPosts");
         } catch (error) {
           console.error("Error updating post:", error);
           setError("An error occurred while updating the post.");
