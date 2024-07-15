@@ -1,10 +1,15 @@
-import React, { useRef, useState } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 import axios, { CanceledError } from "axios";
 import "./PostPage.css";
 import PostService from "../../services/post-service";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faImage } from "@fortawesome/free-solid-svg-icons";
 
 function PostPage() {
+   const img="/src/assets/avatar.jpg"
+   const [imgSrc, setImgSrc] = useState<File>()
+   const fileInputRef = useRef<HTMLInputElement>(null)
   const navigate = useNavigate();
   const [type, setType] = useState("");
   const [gpu, setGpu] = useState("");
@@ -68,7 +73,16 @@ function PostPage() {
     setErrors(errors);
     return valid;
   };
-
+  const imgSelected = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value)
+    if (e.target.files && e.target.files.length > 0) {
+        setImgSrc(e.target.files[0])
+    }
+}
+  const selectImg = () => {
+    console.log("Selecting image...")
+    fileInputRef.current?.click()
+}
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
@@ -81,7 +95,7 @@ function PostPage() {
           motherboard,
           memory,
           ram,
-          image: "image",
+          image: imgSrc,
           comments: 0,
         };
         const {req,cancel} = await PostService.post(dataPost);
@@ -118,7 +132,14 @@ function PostPage() {
     <div className="post-page">
       <div className="post-form-container">
         <h1>Post Your Setup</h1>
-        <form className="post-form" onSubmit={onSubmit}>
+        <form className="form-group" onSubmit={onSubmit}>
+                <div className="d-flex justify-content-center position-relative">
+        <img src={imgSrc ? URL.createObjectURL(imgSrc) : img} style={{ height: "230px", width: "230px" }} className="img-fluid" />
+        <button type="button" className="btn-square position-absolute bottom-0 end-0" onClick={selectImg}>
+            <FontAwesomeIcon icon={faImage} className="fa-xl" />
+        </button>
+      </div>
+      <input style={{ display: "none" }} ref={fileInputRef} type="file" onChange={imgSelected}></input>
           <div className="form-group">
             <label htmlFor="type" className="form-label">
               Type:
