@@ -15,6 +15,7 @@ function FeedPage() {
     cancelRef.current()
   useEffect(() => {
           try {
+            
             setIsLoading(true);
                PostService.getAll().then(async (res)=>{
                 cancelRef.current=res.cancel

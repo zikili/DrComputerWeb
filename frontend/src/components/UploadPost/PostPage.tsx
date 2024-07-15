@@ -137,12 +137,12 @@ function PostPage() {
       <div className="post-form-container">
         <h1>Post Your Setup</h1>
         <form className="form-group" onSubmit={onSubmit}>
-                <div className="d-flex justify-content-center position-relative">
-        <img src={imgSrc ? URL.createObjectURL(imgSrc) : img} style={{ height: "230px", width: "230px" }} className="img-fluid" />
-        <button type="button" className="btn-square position-absolute bottom-0 end-0" onClick={selectImg}>
+          <div className="d-flex justify-content-center position-relative">
+            <img src={imgSrc ? URL.createObjectURL(imgSrc) : img} style={{ height: "230px", width: "230px" }} className="img-fluid" />
+            <button type="button" className="btn-square position-absolute bottom-0 end-0" onClick={selectImg}>
             <FontAwesomeIcon icon={faImage} className="fa-xl" />
-        </button>
-      </div>
+            </button>
+          </div>
       <input style={{ display: "none" }} ref={fileInputRef} type="file" onChange={imgSelected}></input>
           <div className="form-group">
             <label htmlFor="type" className="form-label">

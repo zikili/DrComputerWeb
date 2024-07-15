@@ -77,9 +77,6 @@ function MyPostsPage() {
               <p>
                 <strong>RAM:</strong> {post.ram}
               </p>
-              <p>
-                <strong>Image:</strong> {post.image}
-              </p>
               <img src={post.image} alt="Post Image" className="post-image" />
               <div className="post-actions">
                 <button onClick={() => {if (post._id) handleEdit(post)}}>Edit</button>

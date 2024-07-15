@@ -1,9 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./EditPostPage.css";
 import PostService, { IPost } from "../../services/post-service";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faImage } from "@fortawesome/free-solid-svg-icons";
+import { uploadPhoto } from "../../services/file-service";
 
 function EditPostPage() {
+  const [imgSrc, setImgSrc] = useState<File>()
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const location = useLocation();
   const post = location.state as { post: IPost }
   const [error, setError] = useState<string | null>(null);
@@ -25,7 +30,7 @@ function EditPostPage() {
     motherboard: "",
     memory: "",
     ram: "",
-    image: "",
+
   });
 
   useEffect(() => {
@@ -41,7 +46,16 @@ function EditPostPage() {
       });
     }
   }, [post]);
-
+  const imgSelected = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value)
+    if (e.target.files && e.target.files.length > 0) {
+        setImgSrc(e.target.files[0])
+    }
+}
+  const selectImg = () => {
+    console.log("Selecting image...")
+    fileInputRef.current?.click()
+}
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -59,7 +73,6 @@ function EditPostPage() {
       motherboard: "",
       memory: "",
       ram: "",
-      image: "",
     };
 
     Object.keys(formData).forEach((key) => {
@@ -80,8 +93,18 @@ function EditPostPage() {
     if (validate()) {
       console.log("Submitted", formData);
       if (post) {
+        let image=post.post.image;
+        if(imgSrc){
+          image = await uploadPhoto(imgSrc!);
+        }
         const editedPost: IPost & { _id: string; comments: number } = {
-          ...formData,
+          type:post.post.type,
+          gpu: post.post.gpu,
+          cpu: post.post.cpu,
+          motherboard: post.post.motherboard,
+          memory: post.post.memory,
+          ram: post.post.ram,
+          image: image,
           _id: post.post._id!,
           comments: post.post.comments,
           owner: post.post.owner,  // Ensure you include the owner field if it's needed
@@ -105,7 +128,7 @@ function EditPostPage() {
     { name: "motherboard", maxLength: 20 },
     { name: "memory", maxLength: 20 },
     { name: "ram", maxLength: 20 },
-    { name: "image", maxLength: 20 },
+  
   ];
 
   return (
@@ -133,6 +156,13 @@ function EditPostPage() {
             )}
           </div>
         ))}
+          <div className="d-flex justify-content-center position-relative">
+            <img src={imgSrc ? URL.createObjectURL(imgSrc) : post.post.image} style={{ height: "230px", width: "230px" }} className="img-fluid" />
+            <button type="button" className="btn-square position-absolute bottom-0 end-0" onClick={selectImg}>
+            <FontAwesomeIcon icon={faImage} className="fa-xl" />
+            </button>
+          </div>
+      <input style={{ display: "none" }} ref={fileInputRef} type="file" onChange={imgSelected}></input>
         <div className="btn-container">
           <button type="submit" className="btn btn-primary">
             Update
