@@ -72,11 +72,11 @@ class ApiClient {
               } finally {
                 ApiClient.isRefreshing = false;
               }
-            } else {
-              // If a refresh is already in progress, queue this request
-              return new Promise((resolve, reject) => {
-                ApiClient.requestQueue.push({ resolve, reject, config: originalConfig });
-              });
+            // } else {
+            //   // If a refresh is already in progress, queue this request
+            //   return new Promise((resolve, reject) => {
+            //     ApiClient.requestQueue.push({ resolve, reject, config: originalConfig });
+            //   });
             }
           }
           return Promise.reject(error);
