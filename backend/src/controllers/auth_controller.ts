@@ -21,6 +21,32 @@ const put = async (req: AuthRequest, res: Response)=> {
   }
 };
 
+const updateProfile=async (req: AuthRequest, res: Response) => {
+  const user:IAuthUser = await User.findOne({_id:req.user._id});
+  const username = req.body.profile.username;
+  const email = user.email;
+  const image = req.body.profile.image;
+  let password;
+  if(req.body.password==""){
+    password=user.password;
+  }
+  else{
+    password=req.body.password;
+    const salt = await bcrypt.genSalt(10);
+    password = await bcrypt.hash(password, salt);
+  }
+  try {
+    const newProfile = await User.findByIdAndUpdate(
+      user._id,
+      {username: username, email: email, image: image , password: password},
+      {new: true}
+    );
+    await newProfile.save();
+    res.status(200).json(newProfile);
+}catch (err) {
+  return res.status(400).send(err.message);
+}
+}
 
 const register = async (req: Request, res: Response) => {
   const email = req.body.email;
@@ -229,6 +255,7 @@ const logout = async (req: Request, res: Response) => {
       return res.status(400).send(err.message);
   }
 };
+
 export const getUserName=async (req: Request):Promise<string> => {
   try {
     const user:IAuthUser = await User.findOne({_id:req.body.userId});
@@ -254,4 +281,4 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
   });// as { _id: string };
 }
 
-export default { put,register, login, logout, authMiddleware, refresh,googleSignin , getProfile };
+export default { put,register, login, logout, authMiddleware, refresh,googleSignin , getProfile , getUserName , updateProfile};

@@ -6,7 +6,7 @@ export interface IUser {
     email: string,
     password?: string,
     image: string,
-    username:string
+    username:string,
     _id?: string,
     accessToken?: string,
     refreshToken?: string
@@ -14,6 +14,13 @@ export interface IUser {
 
 export interface IProfile {
     email: string,
+    username:string,
+    image: string
+}
+
+export interface IEditProfile {
+    email: string,
+    password: string,
     username:string
     image: string,
 }
@@ -27,6 +34,22 @@ export interface ITokens{
     refreshToken:string
 }
 class UserService{
+
+    updateUserProfile=(profile:IProfile,password:string)=>{
+        return new Promise<IProfile>((resolve, reject) => {
+            console.log("Updating user profile...")
+            apiClient.put("/auth/update", {profile:profile,password:password},{headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                "Content-Type": "application/json",
+              }}).then((response) => {
+                console.log(response)
+                resolve(response.data)
+            }).catch((error) => {
+                console.log(error)
+                reject(error)
+            })
+        })
+    }
 
     jwtAuthentication=(credentialResponse:CredentialResponse)=>{
         return new Promise<ITokens>((resolve, reject) => {
