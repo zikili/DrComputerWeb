@@ -5,6 +5,7 @@ import PostService from "../../services/post-service";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
+import { uploadPhoto } from "../../services/file-service";
 
 function PostPage() {
    const img="/src/assets/avatar.jpg"
@@ -86,6 +87,9 @@ function PostPage() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
+      let image=img;
+      if(imgSrc)
+        image = await uploadPhoto(imgSrc!);
       setIsLoading(true);
       try {
         const dataPost = {
@@ -95,7 +99,7 @@ function PostPage() {
           motherboard,
           memory,
           ram,
-          image: imgSrc,
+          image,
           comments: 0,
         };
         const {req,cancel} = await PostService.post(dataPost);
