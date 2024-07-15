@@ -152,4 +152,7 @@ router.get("/logout", AuthController.logout);
 router.post("/googleSignin", AuthController.googleSignin)
 
 router.get("/info",authMiddleware, AuthController.getProfile)
+
+router.put("/update",authMiddleware, AuthController.updateProfile)
+
 export default router;

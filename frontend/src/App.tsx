@@ -9,6 +9,7 @@ import ProfilePage from './components/Profile/ProfilePage';
 import CommentsPage from './components/Comments/CommentsPage';
 import EditPostPage from './components/EditPost/EditPostPage';
 import MyPostsPage from './components/MyPosts/MyPostsPage';
+import EditProfilePage from './components/EditProfile/EditProfilePage';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/Post/Comments" element={<CommentsPage />} />
           <Route path="/Post/Edit" element={<EditPostPage />} />
           <Route path="/Profile/MyPosts" element={<MyPostsPage />} />
+          <Route path="/Profile/EditProfile" element={<EditProfilePage />} />
         </Routes>
       </div>
     </Router>
