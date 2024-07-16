@@ -98,12 +98,12 @@ function EditPostPage() {
           image = await uploadPhoto(imgSrc!);
         }
         const editedPost: IPost & { _id: string; comments: number } = {
-          type:post.post.type,
-          gpu: post.post.gpu,
-          cpu: post.post.cpu,
-          motherboard: post.post.motherboard,
-          memory: post.post.memory,
-          ram: post.post.ram,
+          type:formData.type,
+          gpu: formData.gpu,
+          cpu: formData.cpu,
+          motherboard: formData.motherboard,
+          memory: formData.memory,
+          ram: formData.ram,
           image: image,
           _id: post.post._id!,
           comments: post.post.comments,
