@@ -14,7 +14,7 @@ function ArticlePage() {
              getData().then(async (res)=>{
               const response: AxiosResponse<Data>=  res;
               setArticles(response.data.articles)
-            }); // Await for the getAll() result
+            });
         } catch (error) {
           
             if (axios.isCancel(error)||error instanceof CanceledError ) {
@@ -52,9 +52,7 @@ function ArticlePage() {
               <h2>{article.title}</h2>
               <p>Author: {article.author}</p>
               <p>{article.description}</p>
-              {article.urlToImage && (
-                                <img src={article.urlToImage} alt="Article Image" />
-                            )}
+              {article.urlToImage && (<img src={article.urlToImage} alt="Article Image" />)}
             </div>
           ))}
           </div>
