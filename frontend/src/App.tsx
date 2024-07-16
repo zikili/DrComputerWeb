@@ -10,6 +10,7 @@ import CommentsPage from './components/Comments/CommentsPage';
 import EditPostPage from './components/EditPost/EditPostPage';
 import MyPostsPage from './components/MyPosts/MyPostsPage';
 import EditProfilePage from './components/EditProfile/EditProfilePage';
+import ArticlePage from './components/Article/ArticlePage';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/Register" element={<RegisterForm />} />
           <Route path="/Post" element={<UploadPostForm />} />
           <Route path="/Profile" element={<ProfilePage />} />
+          <Route path="/Article" element={<ArticlePage />} />
           <Route path="/Post/Comments" element={<CommentsPage />} />
           <Route path="/Post/Edit" element={<EditPostPage />} />
           <Route path="/Profile/MyPosts" element={<MyPostsPage />} />
