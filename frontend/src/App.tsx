@@ -1,4 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// src/App.tsx
+
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import LoginForm from "./components/Login/LoginForm";
 import RegisterForm from "./components/Register/RegisterPage";
 import UploadPostForm from "./components/UploadPost/PostPage";
@@ -11,11 +13,19 @@ import EditPostPage from './components/EditPost/EditPostPage';
 import MyPostsPage from './components/MyPosts/MyPostsPage';
 import EditProfilePage from './components/EditProfile/EditProfilePage';
 import ArticlePage from './components/Article/ArticlePage';
+import NavBar from './components/NavBar/NavBarPage';
+import './App.css';
 
-function App() {
+const AppContent = () => {
+  const location = useLocation();
+
+  // List of routes where the NavBar should not be displayed
+  const noNavBarRoutes = ["/Login", "/Register", "/"];
+
   return (
-    <Router>
-      <div className="app-container">
+    <div className="app-container">
+      {!noNavBarRoutes.includes(location.pathname) && <NavBar />}
+      <div className="content-container">
         <Routes>
           <Route path="/" element={<StartPage />} />
           <Route path="/Home" element={<HomePage />} />
@@ -31,7 +41,16 @@ function App() {
           <Route path="/Profile/EditProfile" element={<EditProfilePage />} />
         </Routes>
       </div>
+    </div>
+  );
+};
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
+
 export default App;

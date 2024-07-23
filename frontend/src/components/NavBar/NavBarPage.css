@@ -1,0 +1,48 @@
+/* src/components/NavBar.css */
+
+.nav-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: rgb(161, 249, 255);
+    padding: 1rem;
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+  
+  .myButton {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 1rem; /* Adds space between the buttons */
+  }
+  
+  .postBTN {
+    background-color: #4b535c;
+    color: white;
+  }
+  
+  .feedBTN {
+    background-color: #4b535c;
+    color: white;
+  }
+  
+  .profileBTN {
+    background-color: #4b535c;
+    color: white;
+  }
+  
+  .articleBTN {
+    background-color: #4b535c;
+    color: white;
+  }
+  
+  .logoutBTN {
+    background-color: #d62738;
+    color: white;
+  }
+  

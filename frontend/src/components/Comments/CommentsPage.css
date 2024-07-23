@@ -8,7 +8,7 @@
   flex: 1;
   overflow-y: auto;
   padding: 5px;
-  background-color: #f8f9fa;
+  background-color: rgb(161, 249, 255);
 }
 
 .comment-item {
@@ -20,7 +20,7 @@
 .comment-form-section {
   padding: 20px;
   border-top: 1px solid #ddd;
-  background-color: #ffffff;
+  background-color: rgb(161, 249, 255);
   height: 250px; /* Increased height for the form section */
   box-sizing: border-box; /* Ensure padding and border are included in the height */
   display: flex;

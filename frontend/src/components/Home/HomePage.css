@@ -4,7 +4,19 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: #f0f2f5;
+    background-color: rgb(161, 249, 255);
+}
+
+.logo-container {
+    position: absolute;
+    top: 20px; /* Adjust the position as needed */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.logo-container img {
+    max-width: 100px; /* Set the max width for the logo */
+    height: auto; /* Maintain aspect ratio */
 }
 
 .button-container {
@@ -14,7 +26,6 @@
     gap: 20px;
     margin-top: 20px;
 }
-
 
 .logoutBTN {
     padding: 10px 20px;

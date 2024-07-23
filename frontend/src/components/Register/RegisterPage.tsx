@@ -8,9 +8,9 @@ import { uploadPhoto } from "../../services/file-service";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 
-
 function RegisterPage() {
   const img="/src/assets/avatar.jpg"
+  const logo="/src/assets/logo.png"
   const navigate = useNavigate();
   const [imgSrc, setImgSrc] = useState<File>()
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -111,6 +111,9 @@ function RegisterPage() {
 
   return (
     <div className="register-page">
+      <div className="logo-container">
+        <img src={logo} alt="Logo" />
+      </div>
       <div className="register-header">
         <h1>Register</h1>
       </div>
