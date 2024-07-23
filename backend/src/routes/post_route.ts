@@ -103,7 +103,28 @@ import { authMiddleware } from "../controllers/auth_controller";
  *              image: 'image'
  *              comments: []
  */
+
+
+
 router.get("/getMyPosts", authMiddleware, PostController.getMyPosts.bind(PostController))
+
+
+/**
+ * @swagger
+*  /get: 
+*   get:
+*       summary: get post/s
+*       security:
+*           - bearerAuth: []
+*       responses:
+*           200:
+*               description: returns post array
+*               content:
+*                   application/json:
+*                       schema:
+*                           $ref: '#/components/schemas/Post'
+*/
+
 router.get("/", authMiddleware, PostController.get.bind(PostController));
 router.get("/:id", authMiddleware, PostController.get.bind(PostController));
 
