@@ -16,6 +16,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 function LoginForm() {
+  const logo="/src/assets/logo.png"
   const navigate = useNavigate();
   console.log("LoginForm");
   const {
@@ -66,6 +67,9 @@ function LoginForm() {
 
   return (
     <div className="form-container">
+      <div className="logo-container">
+        <img src={logo} alt="Logo" />
+      </div>
       <div className="login-header">
         <h1>Login</h1>
       </div>

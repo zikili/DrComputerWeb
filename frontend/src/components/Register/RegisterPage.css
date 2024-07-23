@@ -4,7 +4,19 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f2f5;
+    background-color: rgb(161, 249, 255);
+}
+
+.logo-container {
+    position: absolute;
+    top: 20px; /* Adjust the position as needed */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.logo-container img {
+    max-width: 100px; /* Set the max width for the logo */
+    height: auto; /* Maintain aspect ratio */
 }
 
 /* Styling for the form */

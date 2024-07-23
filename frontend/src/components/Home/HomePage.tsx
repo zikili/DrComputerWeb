@@ -5,6 +5,7 @@ import './HomePage.css';
 import { CanceledError } from 'axios';
 
 function HomePage() {
+  const logo="/src/assets/logo.png"
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
@@ -26,6 +27,9 @@ function HomePage() {
   }
   return (
     <div className="home-container">
+      <div className="logo-container">
+        <img src={logo} alt="Logo" />
+      </div>
       <h1>Home Page</h1>
       <div className="button-container">
         <button className="postBTN myButton" onClick={() => navigate('/Post')}>Post</button>

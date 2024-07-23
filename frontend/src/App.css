@@ -1,0 +1,12 @@
+.app-container {
+    display: flex;
+    background-color: rgb(161, 249, 255); /* Set the background color here */
+    min-height: 100vh; /* Ensure the container covers the full height of the viewport */
+  }
+  
+  .content-container {
+    margin-left: 220px; /* Adjust based on the width of the NavBar */
+    padding: 1rem;
+    width: calc(100% - 220px); /* Adjust based on the width of the NavBar */
+  }
+  
