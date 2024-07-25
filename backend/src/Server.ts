@@ -6,17 +6,7 @@ import https from "https";
 import fs from "fs";
 
 init().then((app) => {
-  if (process.env.NODE_ENV !== "production") {
-    console.log("DEVELOPMENT");
-    http.createServer(app).listen(process.env.PORT);
-  } else {
-    console.log("PRODUCTION");
-    const options2 = {
-      key: fs.readFileSync("../../client-key.pem"),
-      cert: fs.readFileSync("../client-cert.pem"),
-    };
-    https.createServer(options2, app).listen(process.env.HTTPS_PORT);
-  }
+
 
   const options = {
     definition: {
@@ -32,10 +22,16 @@ init().then((app) => {
   };
   const specs = swaggerJsDoc(options);
   app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
+  if (process.env.NODE_ENV !== "production") {
+    console.log("DEVELOPMENT");
+    http.createServer(app).listen(process.env.PORT);
+  } else {
+    console.log("PRODUCTION");
+    const options2 = {
+      key: fs.readFileSync("../../client-key.pem"),
+      cert: fs.readFileSync("../client-cert.pem"),
+    };
+    https.createServer(options2, app).listen(process.env.HTTPS_PORT);
+  }
 
-  app.listen(process.env.PORT, () => {
-    console.log(
-      "Example app listening at http://localhost:" + process.env.PORT
-    );
-  });
 });
