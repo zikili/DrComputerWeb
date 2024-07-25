@@ -62,15 +62,15 @@ function CommentsPage() {
       <div className="comments-section">
         {isLoading ? (
           <div className="spinner-border text-primary" />
-        ) : error ? (
-          <div className="alert alert-danger">{error}</div>
-        ) : (
+        ) : comments ? (
           comments.map((comment, index) => (
             <div key={index} className="comment-item">
               <p><strong>{comment.userName}:</strong> {comment.content}</p>
             </div>
           ))
-        )}
+        ):(
+          <div className="alert alert-danger">{error}</div>
+        ) }
       </div>
       <div className="comment-form-section">
         <form onSubmit={handleSubmit}>

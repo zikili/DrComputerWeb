@@ -106,7 +106,7 @@ function PostPage() {
         console.log("Upload Successful:", req.data);
         setMessage("Upload Successful!");
         setError("");
-        navigate("/Home");
+        navigate("/Feed");
       } catch (error: unknown) {
         if (axios.isAxiosError(error) && (error instanceof CanceledError||axios.isCancel(error))) {
           console.log("CANCELTA OTANU");
