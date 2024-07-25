@@ -83,6 +83,13 @@ function EditProfilePage() {
     fileInputRef.current?.click();
   };
 
+  const deleteImg = () => {
+    setImgSrc(null);
+    setProfile(prevProfile => ({
+      ...prevProfile,
+      image: "..//src/assets/avatar.jpg"
+    }));
+  }
   return (
     <div className="edit-profile-page">
       <div className="profile-header">
@@ -122,6 +129,9 @@ function EditProfilePage() {
             <input style={{ display: "none" }} ref={fileInputRef} type="file" onChange={imgSelected}></input>
           </div>
           {error && <div className="alert alert-danger alert-dismissible fade show">{error}</div>}
+          <div className="delete-button">
+            <button className="btn btn-danger" onClick={deleteImg}>Delete Image</button>
+          </div>
           <div className="button-group">
             <button className="btn btn-primary" onClick={handleSave}>SAVE</button>
             <button className="btn btn-secondary" onClick={handleCancel}>CANCEL</button>

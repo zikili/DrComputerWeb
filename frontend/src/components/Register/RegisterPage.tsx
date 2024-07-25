@@ -94,7 +94,7 @@ function RegisterPage() {
         console.log("Login Successful:", loginResponse);
         setMessage("Registration Successful!");
         setError("");
-        navigate('/Home');
+        navigate('/Feed');
       } catch (error:unknown) {
         if (axios.isAxiosError(error) && error instanceof CanceledError) return;
         console.error("Registration Error:", error);

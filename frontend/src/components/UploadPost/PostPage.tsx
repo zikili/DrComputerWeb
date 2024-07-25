@@ -8,7 +8,7 @@ import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { uploadPhoto } from "../../services/file-service";
 
 function PostPage() {
-   const img="/src/assets/avatar.jpg"
+   const img="/src/assets/empty_image.jpeg"
    const [imgSrc, setImgSrc] = useState<File>()
    const fileInputRef = useRef<HTMLInputElement>(null)
   const navigate = useNavigate();
@@ -18,7 +18,6 @@ function PostPage() {
   const [motherboard, setMotherboard] = useState("");
   const [memory, setMemory] = useState("");
   const [ram, setRam] = useState("");
-  //const [image, setImage] = useState("");
   const [errors, setErrors] = useState({
     type: "",
     gpu: "",
