@@ -34,7 +34,7 @@ function LoginForm() {
       .then(() => {
         setIsLoading(false);
         console.log("login success");
-        navigate('/Home');
+        navigate('/Feed');
       })
       .catch((error) => {
         if (error instanceof CanceledError) return;
