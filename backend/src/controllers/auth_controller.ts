@@ -158,13 +158,14 @@ const login = async (req: Request, res: Response) => {
 const client = new OAuth2Client();
 const googleSignin = async (req: Request, res: Response) => {
   const credential = req.body.credential;
+  console.log("HERE "+credential)
   try {
   const ticket = await client.verifyIdToken({
   idToken: credential,
   audience: process.env.GOOGLE_CLIENT_ID+".apps.googleusercontent.com",
   });
+
   const payload = ticket.getPayload();
-  console.log(payload);
   const email = payload?.email;
  let user = await User.findOne({ 'email': email });
  if (user == null) {
