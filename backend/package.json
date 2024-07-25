@@ -5,10 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "tsc && jest --detectOpenHandles --forceExit --coverage",
-    "start": "tsc && node dist/src/server.js",
+    "start": "tsc && node dist/src/Server.js",
     "testAuth": "tsc && jest --detectOpenHandles --forceExit ./src/tests/auth.test.ts",
     "lint": "eslint . --ext .ts",
-    "dev": "nodemon ./src/server.ts"
+    "dev": "nodemon ./src/Server.ts",
+    "prod": "tsc -p tsconfig_prod.json && node ./dist/src/Server.js",
+    "prod1": "cp .envprod .env && tsc -p tsconfig_prod.json && node ./dist/src/Server.js"
   },
   "author": "Menachi",
   "license": "ISC",
