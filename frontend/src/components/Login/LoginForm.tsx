@@ -54,7 +54,7 @@ function LoginForm() {
         localStorage.setItem('accessToken',(decodeRes).accessToken)
         localStorage.setItem('refreshToken', (decodeRes).refreshToken)
       }
-      navigate('/Home');
+      navigate('/Feed');
     } catch (error) {
       console.log("Failed to sign in with Google, please try again later.");
     }

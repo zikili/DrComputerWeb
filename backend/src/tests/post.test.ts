@@ -63,8 +63,8 @@ describe("Posts Tests", () => {
 test("Test post post", async () => {
   const res = await request(app)
     .post("/post")
-    .send(testPost1)
-    .set("Authorization", "Bearer " + user.accessToken);
+    .set("Authorization", "Bearer " + user.accessToken)
+    .send(testPost1);
   expect(res.statusCode).toEqual(201);
   expect(res.body).toHaveProperty("_id");
   expect(user._id).toEqual(testPost1.owner);

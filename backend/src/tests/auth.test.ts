@@ -18,7 +18,7 @@ type TestUser = {
 const user: TestUser = {
   email: "test@test.com",
   password: "1234",
-  username: "XXXX",
+  username: "myTest",
   image:"image"
 };
 
