@@ -9,4 +9,7 @@
     padding: 1rem;
     width: calc(100% - 220px); /* Adjust based on the width of the NavBar */
   }
-  
+  .no-navbar .content-container {
+    margin-left: 0; /* No left margin when NavBar is not present */
+    width: 100%; /* Full width */
+  }

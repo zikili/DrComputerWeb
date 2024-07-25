@@ -18,13 +18,15 @@ import './App.css';
 
 const AppContent = () => {
   const location = useLocation();
-
+  
   // List of routes where the NavBar should not be displayed
-  const noNavBarRoutes = ["/Login", "/Register", "/"];
+  const noNavBarRoutes = ["/Login", "/Register","/"];
+  
+  const isNoNavBarRoute = noNavBarRoutes.includes(location.pathname);
 
   return (
-    <div className="app-container">
-      {!noNavBarRoutes.includes(location.pathname) && <NavBar />}
+    <div className={`app-container ${isNoNavBarRoute ? 'no-navbar' : ''}`}>
+      {!isNoNavBarRoute && <NavBar />}
       <div className="content-container">
         <Routes>
           <Route path="/" element={<StartPage />} />
