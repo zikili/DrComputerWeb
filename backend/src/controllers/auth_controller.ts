@@ -163,8 +163,8 @@ const googleSignin = async (req: Request, res: Response) => {
   idToken: credential,
   audience: process.env.GOOGLE_CLIENT_ID+".apps.googleusercontent.com",
   });
+
   const payload = ticket.getPayload();
-  console.log(payload);
   const email = payload?.email;
  let user = await User.findOne({ 'email': email });
  if (user == null) {

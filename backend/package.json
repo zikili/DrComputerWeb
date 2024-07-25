@@ -4,7 +4,7 @@
   "description": "This is the REST api",
   "main": "index.js",
   "scripts": {
-    "test": "tsc && jest --detectOpenHandles --forceExit",
+    "test": "tsc && jest --detectOpenHandles --forceExit --coverage",
     "start": "tsc && node dist/src/server.js",
     "testAuth": "tsc && jest --detectOpenHandles --forceExit ./src/tests/auth.test.ts",
     "lint": "eslint . --ext .ts",
