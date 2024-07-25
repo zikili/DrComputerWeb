@@ -105,15 +105,12 @@ import { authMiddleware } from "../controllers/auth_controller";
  */
 
 
-
-router.get("/getMyPosts", authMiddleware, PostController.getMyPosts.bind(PostController))
-
-
 /**
  * @swagger
-*  /get: 
+*  /get/getMyPosts: 
 *   get:
-*       summary: get post/s
+*       summary: Get all of my posts
+*       tags: [Posts]
 *       security:
 *           - bearerAuth: []
 *       responses:
@@ -122,10 +119,92 @@ router.get("/getMyPosts", authMiddleware, PostController.getMyPosts.bind(PostCon
 *               content:
 *                   application/json:
 *                       schema:
+*                       type: array
+*                       items:
 *                           $ref: '#/components/schemas/Post'
+*           403:
+*              description: Wrong token used
+*              content:
+*                  application/json:
+*                      schema:
+*                          $ref: '#/components/schemas/Error'
+*           500:
+*               description: error in db
+*               content:
+*                   application/json:
+*                       schema:
+*                           $ref: '#/components/schemas/Error'
 */
+router.get("/getMyPosts", authMiddleware, PostController.getMyPosts.bind(PostController))
 
+
+/**
+ * @swagger
+*  /get: 
+*   get:
+*       summary: get post/posts
+*       tags: [Posts]
+*       security:
+*           - bearerAuth: []
+*       responses:
+*           200:
+*               description: returns post array
+*               content:
+*                   application/json:
+*                       schema:
+*                       type: array
+*                       items:
+*                           $ref: '#/components/schemas/Post'
+*           403:
+*              description: Wrong token used
+*              content:
+*                  application/json:
+*                      schema:
+*                          $ref: '#/components/schemas/Error'
+*           500:
+*               description: error in db
+*               content:
+*                   application/json:
+*                       schema:
+*                           $ref: '#/components/schemas/Error'
+*/
 router.get("/", authMiddleware, PostController.get.bind(PostController));
+/**
+ * @swagger
+ * /get/:id:
+ *   get:
+ *     summary: Get post by ID
+ *     tags: [Posts]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the post to retrieve
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Returns the requested post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *       403:
+ *         description: Wrong token used
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error in database
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
 router.get("/:id", authMiddleware, PostController.get.bind(PostController));
 
 /**
@@ -165,10 +244,68 @@ router.get("/:id", authMiddleware, PostController.get.bind(PostController));
 
 router.post("/", authMiddleware, PostController.post.bind(PostController));
 
-//put
+/**
+ * @swagger
+ * /post:
+ *   put:
+ *     summary: Updates an existing post
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Post'
+ *     responses:
+ *       200:
+ *         description: The updated post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *       403:
+ *         description: Wrong token used
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: db error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
 router.put("/", authMiddleware, PostController.put.bind(PostController));
 
-//delete
+/**
+ * @swagger
+ * /post:
+ *   delete:
+ *     summary: Deletes a post by ID
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully deleted the post
+ *       403:
+ *         description: Wrong token used
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: db error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
 router.delete("/", authMiddleware, PostController.delete.bind(PostController));
 
 export default router;
