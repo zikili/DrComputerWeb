@@ -22,8 +22,8 @@ app.get('*', (req, res) => {
 
 // HTTPS options including certificate and key
 const options = {
-  key: readFileSync(path.join(__dirname, '../../path/to/your/client-key.pem')),
-  cert: readFileSync(path.join(__dirname, '../../path/to/your/client-cert.pem')),
+  key: readFileSync(path.join(__dirname, '../../client-key.pem')),
+  cert: readFileSync(path.join(__dirname, '../../client-cert.pem')),
 };
 
 // Create an HTTPS server
