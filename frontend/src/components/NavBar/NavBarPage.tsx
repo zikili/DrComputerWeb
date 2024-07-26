@@ -37,6 +37,7 @@ const NavBar = () => {
           {isLoading && <div className="spinner-border text-primary" />}
           {error && <div className="alert alert-danger">{error}</div>}
         </div>
+
     </nav>
   );
 }
