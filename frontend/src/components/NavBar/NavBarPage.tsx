@@ -32,6 +32,8 @@ const NavBar = () => {
       <button className="profileBTN myButton" onClick={() => navigate('/Profile')}>Profile</button>
       <button className="articleBTN myButton" onClick={() => navigate('/Article')}>Articles</button>
       <button className="logoutBTN" onClick={async () => await logoutFunction()}>LogOut</button>
+      {isLoading && <div className="spinner-border text-primary" />}  
+      {error && <div className="alert alert-danger alert-dismissible fade show">{error}</div>}
     </nav>
   );
 }

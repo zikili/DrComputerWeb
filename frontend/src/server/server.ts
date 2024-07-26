@@ -1,14 +1,19 @@
-const express = require('express');
-const fs = require('fs');
-const https = require('https');
-const path = require('path');
+import express from 'express';
+import fs from 'fs';
+import https from 'https';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
+
+// Get the directory name from the URL
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(express.static(path.join(__dirname, 'build')));
 console.log(path.join(__dirname, 'build'));
 
-app.get('*', (req, res) => {
+app.get('*', (_req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
