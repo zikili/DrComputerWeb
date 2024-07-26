@@ -34,7 +34,7 @@ function LoginForm() {
       .then(() => {
         setIsLoading(false);
         console.log("login success");
-        navigate('/Home');
+        navigate('/Feed');
       })
       .catch((error) => {
         if (error instanceof CanceledError) return;
@@ -54,7 +54,7 @@ function LoginForm() {
         localStorage.setItem('accessToken',(decodeRes).accessToken)
         localStorage.setItem('refreshToken', (decodeRes).refreshToken)
       }
-      navigate('/Home');
+      navigate('/Feed');
     } catch (error) {
       console.log("Failed to sign in with Google, please try again later.");
     }

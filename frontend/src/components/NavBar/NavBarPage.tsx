@@ -29,6 +29,7 @@ const NavBar = () => {
     <nav className="nav-bar">
       <button className="postBTN myButton" onClick={() => navigate('/Post')}>Post</button>
       <button className="feedBTN myButton" onClick={() => navigate('/Feed')}>Feed</button>
+      <button className="myPostsBTN myButton" onClick={() => navigate('/Profile/MyPosts')}>myPosts</button>
       <button className="profileBTN myButton" onClick={() => navigate('/Profile')}>Profile</button>
       <button className="articleBTN myButton" onClick={() => navigate('/Article')}>Articles</button>
       <button className="logoutBTN" onClick={async () => await logoutFunction()}>LogOut</button>

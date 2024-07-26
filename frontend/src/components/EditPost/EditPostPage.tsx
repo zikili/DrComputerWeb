@@ -7,7 +7,8 @@ import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { uploadPhoto } from "../../services/file-service";
 
 function EditPostPage() {
-  const [imgSrc, setImgSrc] = useState<File>()
+  const [imgSrc, setImgSrc] = useState<File | null>(null)
+  let myImage: string = "";
   const fileInputRef = useRef<HTMLInputElement>(null)
   const location = useLocation();
   const post = location.state as { post: IPost }
@@ -56,6 +57,12 @@ function EditPostPage() {
     console.log("Selecting image...")
     fileInputRef.current?.click()
 }
+
+const deleteImg = () => {
+  setImgSrc(null);
+  myImage = "..//src/assets/empty_image.jpeg"
+};
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -93,9 +100,12 @@ function EditPostPage() {
     if (validate()) {
       console.log("Submitted", formData);
       if (post) {
-        let image=post.post.image;
+        if(myImage == "")
+        {
+          myImage = post.post.image;
+        }
         if(imgSrc){
-          image = await uploadPhoto(imgSrc!);
+          myImage = await uploadPhoto(imgSrc!);
         }
         const editedPost: IPost & { _id: string; comments: number } = {
           type:formData.type,
@@ -104,7 +114,7 @@ function EditPostPage() {
           motherboard: formData.motherboard,
           memory: formData.memory,
           ram: formData.ram,
-          image: image,
+          image: myImage,
           _id: post.post._id!,
           comments: post.post.comments,
           owner: post.post.owner,  // Ensure you include the owner field if it's needed
@@ -163,6 +173,11 @@ function EditPostPage() {
             </button>
           </div>
       <input style={{ display: "none" }} ref={fileInputRef} type="file" onChange={imgSelected}></input>
+        <div className="form-group">
+          <button type="button" className="btn btn-danger" onClick={deleteImg}>
+            Delete Image
+          </button>
+        </div>
         <div className="btn-container">
           <button type="submit" className="btn btn-primary">
             Update
