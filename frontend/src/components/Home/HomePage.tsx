@@ -1,17 +1,17 @@
+
 import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import UserService from "../../services/user-service";
 import './HomePage.css';
-import { CanceledError } from 'axios';
+import image from '/assets/logo.png'; // Correctly importing the image
 
 function HomePage() {
-  const logo="/src/assets/logo.png"
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
-  
-   const logoutFunction = async () => {
-    const userService:UserService = new UserService();
+
+  const logoutFunction = async () => {
+    const userService: UserService = new UserService();
     await userService.logoutUser()
       .then(() => {
         setIsLoading(false);
@@ -19,16 +19,16 @@ function HomePage() {
         navigate('/');
       })
       .catch((error) => {
-        if (error instanceof CanceledError) return;
         console.log(error);
         setError("Wrong credentials, please try again.");
         setIsLoading(false);
       });
   }
+
   return (
     <div className="home-container">
       <div className="logo-container">
-        <img src={logo} alt="Logo" />
+        <img src={image} alt="Logo" /> {/* Referencing the imported image */}
       </div>
       <h1>Home Page</h1>
       <div className="button-container">
@@ -39,9 +39,9 @@ function HomePage() {
         <button className="logoutBTN" onClick={async () => await logoutFunction()}>LogOut</button>
       </div>
       <div>
-          {isLoading && <div className="spinner-border text-primary" />}
-          {error && <div className="alert alert-danger">{error}</div>}
-        </div>
+        {isLoading && <div className="spinner-border text-primary" />}
+        {error && <div className="alert alert-danger">{error}</div>}
+      </div>
     </div>
   );
 }

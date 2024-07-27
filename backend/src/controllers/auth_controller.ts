@@ -158,6 +158,7 @@ const login = async (req: Request, res: Response) => {
 const client = new OAuth2Client();
 const googleSignin = async (req: Request, res: Response) => {
   const credential = req.body.credential;
+  console.log(credential)
   try {
   const ticket = await client.verifyIdToken({
   idToken: credential,

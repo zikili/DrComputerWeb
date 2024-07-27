@@ -7,10 +7,11 @@ import { useNavigate } from 'react-router-dom';
 import { uploadPhoto } from "../../services/file-service";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
-
+import logoimp from '/assets/logo.png';
+import avatar from '/assets/avatar.jpg'
 function RegisterPage() {
-  const img="/src/assets/avatar.jpg"
-  const logo="/src/assets/logo.png"
+  const img=avatar
+  const logo=logoimp
   const navigate = useNavigate();
   const [imgSrc, setImgSrc] = useState<File>()
   const fileInputRef = useRef<HTMLInputElement>(null)

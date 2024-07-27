@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import './StartPage.css';
-
+import image from '/assets/logo.png';
 function StartPage() {
-  const logo="/src/assets/logo.png"
+  const logo=image
   const navigate = useNavigate();
 
   return (

@@ -53,7 +53,7 @@ class UserService{
 
     jwtAuthentication=(credentialResponse:CredentialResponse)=>{
         return new Promise<ITokens>((resolve, reject) => {
-            console.log("Registering user...")
+            console.log("Registering user..."+credentialResponse.credential)
             apiClient.post("/auth/googleSignin", {credential:credentialResponse.credential}).then((response) => {
                 console.log("Service response"+response)
                 resolve(response.data)

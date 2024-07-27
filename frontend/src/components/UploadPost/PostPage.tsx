@@ -6,9 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { uploadPhoto } from "../../services/file-service";
-
+import emptyImage from '/assets/empty_image.jpg'
 function PostPage() {
-   const img="/src/assets/empty_image.jpeg"
+   const img=emptyImage
    const [imgSrc, setImgSrc] = useState<File>()
    const fileInputRef = useRef<HTMLInputElement>(null)
   const navigate = useNavigate();

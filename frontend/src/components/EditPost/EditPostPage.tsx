@@ -5,7 +5,7 @@ import PostService, { IPost } from "../../services/post-service";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { uploadPhoto } from "../../services/file-service";
-
+import emptyImage from '/assets/empty_image.jpg'
 function EditPostPage() {
   const [imgSrc, setImgSrc] = useState<File | null>(null)
   let myImage: string = "";
@@ -60,7 +60,7 @@ function EditPostPage() {
 
 const deleteImg = () => {
   setImgSrc(null);
-  myImage = "..//src/assets/empty_image.jpeg"
+  myImage = emptyImage
 };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
