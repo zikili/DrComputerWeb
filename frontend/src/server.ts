@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);
 
 // SSL certificate and key
 const options = {
-  key: fs.readFileSync("../../myprefx-client-key.pem"),
+  key: fs.readFileSync("../../myprefix-client-key.pem"),
   cert: fs.readFileSync("../../myprefix-client-cert.pem")
 };
 
