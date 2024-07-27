@@ -12,8 +12,8 @@ const __dirname = path.dirname(__filename);
 
 // SSL certificate and key
 const options = {
-  key: fs.readFileSync('path/to/your/ssl.key'),
-  cert: fs.readFileSync('path/to/your/ssl.cert')
+  key: fs.readFileSync("../../myprefx-client-key.pem"),
+  cert: fs.readFileSync("../../myprefix-client-cert.pem")
 };
 
 // Serve static files from the Vite build directory
