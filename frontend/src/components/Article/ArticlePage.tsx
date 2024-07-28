@@ -13,6 +13,8 @@ function ArticlePage() {
           setIsLoading(true);
              getData().then(async (res)=>{
               const response: AxiosResponse<Data>=  res;
+              if(response.status!==200)
+                setError("Couldn't fetch posts")
               setArticles(response.data.articles)
             });
         } catch (error) {
