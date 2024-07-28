@@ -27,8 +27,7 @@ export const getData = async ():Promise<AxiosResponse<Data>> => {
         const response: Promise<AxiosResponse<Data>> = axios.get(url,{
             headers: {
                 'Accept': 'application/json',
-                'User-Agent': 'YourAppName/1.0' // Custom User-Agent header, adjust as needed
-                // 'Upgrade': 'websocket' // Uncomment if the API requires this header
+                'Upgrade': 'websocket' // Uncomment if the API requires this header
               }
         });
         return response
