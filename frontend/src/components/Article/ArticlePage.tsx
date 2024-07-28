@@ -15,7 +15,7 @@ function ArticlePage() {
               const response: AxiosResponse<Data>|AxiosError=  res;
               console.log(response.status)
               if(axios.isAxiosError(response))
-                setError("Couldn't fetch posts")
+                setError("Couldn't fetch articles")
               else
               setArticles(response.data.articles)
             });
@@ -27,7 +27,7 @@ function ArticlePage() {
             }
             else {
               setError("Error fetching posts")
-                console.error('Error fetching posts:', error);
+                console.error('Error fetching articles:', error);
             }
         }
         finally {
