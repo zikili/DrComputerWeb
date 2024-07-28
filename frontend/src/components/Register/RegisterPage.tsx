@@ -1,25 +1,25 @@
 import React, { ChangeEvent, useRef, useState } from "react";
 import axios, { CanceledError } from "axios";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./RegisterPage.css";
 import UserService from "../../services/user-service";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { uploadPhoto } from "../../services/file-service";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
-import logoimp from '/assets/logo.png';
-import avatar from '/assets/avatar.jpg'
+import logoimp from "/assets/logo.png";
+import avatar from "/assets/avatar.jpg";
 function RegisterPage() {
-  const img=avatar
-  const logo=logoimp
+  const img = avatar;
+  const logo = logoimp;
   const navigate = useNavigate();
-  const [imgSrc, setImgSrc] = useState<File>()
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [imgSrc, setImgSrc] = useState<File>();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
   const [errors, setErrors] = useState({
     username: "",
     email: "",
@@ -29,17 +29,16 @@ function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
 
-
   const imgSelected = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value)
+    console.log(e.target.value);
     if (e.target.files && e.target.files.length > 0) {
-        setImgSrc(e.target.files[0])
+      setImgSrc(e.target.files[0]);
     }
-}
+  };
   const selectImg = () => {
-    console.log("Selecting image...")
-    fileInputRef.current?.click()
-}
+    console.log("Selecting image...");
+    fileInputRef.current?.click();
+  };
 
   const validateEmail = (email: string) => {
     return /\S+@\S+\.\S+/.test(email);
@@ -83,25 +82,23 @@ function RegisterPage() {
       const controller = new AbortController();
       setIsLoading(true);
       try {
-        let image=img;
-        if(imgSrc)
-          image = await uploadPhoto(imgSrc!);
+        let image = img;
+        if (imgSrc) image = await uploadPhoto(imgSrc!);
         console.log("upload returned:" + image);
-        const registerData = { username,email,password,image};
-        const userService:UserService=new UserService();
+        const registerData = { username, email, password, image };
+        const userService: UserService = new UserService();
         const registerResponse = await userService.registerUser(registerData);
-        const loginResponse =await userService.loginUser({email,password})
+        const loginResponse = await userService.loginUser({ email, password });
         console.log("Registration Successful:", registerResponse);
         console.log("Login Successful:", loginResponse);
         setMessage("Registration Successful!");
         setError("");
-        navigate('/Feed');
-      } catch (error:unknown) {
+        navigate("/Feed");
+      } catch (error) {
         if (axios.isAxiosError(error) && error instanceof CanceledError) return;
         console.error("Registration Error:", error);
-        setError(
-          "An error occurred during registration. Please try again later."
-        );
+        if (axios.isAxiosError(error))
+          if (error.response) setError(error.response.data);
         setMessage("");
       } finally {
         setIsLoading(false);
@@ -119,13 +116,26 @@ function RegisterPage() {
         <h1>Register</h1>
       </div>
       <form className="register-form" onSubmit={onSubmit}>
-      <div className="d-flex justify-content-center position-relative">
-        <img src={imgSrc ? URL.createObjectURL(imgSrc) : img} style={{ height: "230px", width: "230px" }} className="img-fluid" />
-        <button type="button" className="btn-square position-absolute bottom-0 end-0" onClick={selectImg}>
+        <div className="d-flex justify-content-center position-relative">
+          <img
+            src={imgSrc ? URL.createObjectURL(imgSrc) : img}
+            style={{ height: "230px", width: "230px" }}
+            className="img-fluid"
+          />
+          <button
+            type="button"
+            className="btn-square position-absolute bottom-0 end-0"
+            onClick={selectImg}
+          >
             <FontAwesomeIcon icon={faImage} className="fa-xl" />
-        </button>
-      </div>
-        <input style={{ display: "none" }} ref={fileInputRef} type="file" onChange={imgSelected}></input>
+          </button>
+        </div>
+        <input
+          style={{ display: "none" }}
+          ref={fileInputRef}
+          type="file"
+          onChange={imgSelected}
+        ></input>
         <div className="form-group">
           <label htmlFor="username" className="form-label">
             Username:
@@ -174,16 +184,20 @@ function RegisterPage() {
             <small className="error">{errors.password}</small>
           )}
         </div>
-        <div className="row d-flex justify-content-center align-content-center "  >
-        <button type="submit" className="btn btn-block btn-primary">
-          Register
-        </button>
+        <div className="row d-flex justify-content-center align-content-center ">
+          <button type="submit" className="btn btn-block btn-primary">
+            Register
+          </button>
         </div>
         {isLoading && <div className="spinner-border text-primary" />}
         {message && <p className="message">{message}</p>}
-        {error && <div className="alert alert-danger alert-dismissible fade show">{error}</div>}
+        {error && (
+          <div className="alert alert-danger alert-dismissible fade show">
+            {error}
+          </div>
+        )}
       </form>
-      
     </div>
   );
-} export default RegisterPage;
+}
+export default RegisterPage;
