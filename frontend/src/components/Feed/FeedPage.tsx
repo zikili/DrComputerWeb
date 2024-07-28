@@ -11,7 +11,6 @@ function FeedPage() {
   const [error, setError] = useState<string | null>(null);
   // Prevent state update on unmounted component
   const cancelRef = useRef<(() => void | undefined) | undefined>();
-  if (cancelRef.current) cancelRef.current();
   useEffect(() => {
     const fetchPosts = async () => {
       try {
