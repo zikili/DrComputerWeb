@@ -16,8 +16,8 @@ function ArticlePage() {
               console.log(response.status)
               if(axios.isAxiosError(response))
                 setError("Couldn't fetch posts")
-              else{
-              setArticles(response.data.articles)}
+              else
+              setArticles(response.data.articles)
             });
         } catch (error) {
           
