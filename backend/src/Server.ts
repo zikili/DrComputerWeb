@@ -6,8 +6,6 @@ import https from "https";
 import fs from "fs";
 
 init().then((app) => {
-
-
   const options = {
     definition: {
       openapi: "3.0.0",
@@ -23,15 +21,14 @@ init().then((app) => {
   const specs = swaggerJsDoc(options);
   app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
   if (process.env.NODE_ENV !== "production") {
-    console.log("DEVELOPMENT"+process.env.PORT);
+    console.log("DEVELOPMENT" + process.env.PORT);
     http.createServer(app).listen(process.env.PORT);
   } else {
     console.log("PRODUCTION");
     const options2 = {
-      key: fs.readFileSync("../../client-key.pem"),
-      cert: fs.readFileSync("../../client-cert.pem"),
+      key: fs.readFileSync("../../backend-client-key.pem"),
+      cert: fs.readFileSync("../../backend-client-cert.pem"),
     };
     https.createServer(options2, app).listen(process.env.HTTPS_PORT);
   }
-
 });
