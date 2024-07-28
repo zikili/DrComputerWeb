@@ -1,6 +1,6 @@
 import  { useState, useEffect,useRef } from 'react';
 import PostService, { IPost } from '../../services/post-service'; // Adjust the path as per your project structure
-import axios, {  AxiosResponse, CanceledError } from 'axios';
+import {  AxiosResponse } from 'axios';
 import './FeedPage.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,6 +14,7 @@ function FeedPage() {
   if(cancelRef.current)
     cancelRef.current()
   useEffect(() => {
+    const fetchPosts = async () => {
           try {
             
             setIsLoading(true);
@@ -23,29 +24,18 @@ function FeedPage() {
                 setPosts(response.data);
               }); // Await for the getAll() result
           } catch (error) {
-            
-              if (axios.isCancel(error)||error instanceof CanceledError ) {
-                setIsLoading(false);
-                return 
-              }
-                else if(error instanceof DOMException && error.name === 'AbortError')
-                  {
-                    console.log('Request aborted')
-                    setIsLoading(false);
-                    return () => {
-                      if(cancelRef.current)
-                      cancelRef.current() // Prevent state update on destructed component
-                    };
-                  }
-              else {
                 setError("Error fetching posts")
-                  console.error('Error fetching posts:', error);
-              }
+                  console.error('Error fetching posts:', error); 
           }
           finally {
             setIsLoading(false);
           }
+        }
+        fetchPosts();
+
+        
           return () => {
+            console.log("hello")
             if(cancelRef.current)
             cancelRef.current() // Prevent state update on destructed component
           };
