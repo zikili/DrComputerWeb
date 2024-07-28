@@ -9,7 +9,4 @@ frontend/package-lock.json
 frontend/.env
 backend/.env.prod
 .env
-backend\.env.prod
-backend/.env.prod
-backend/.env.prod
 backend/.env.prod

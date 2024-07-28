@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import https from 'https';
 import fs from 'fs';
-
+import cors from 'cors';
 const app = express();
 const port = 443;
 
@@ -15,7 +15,7 @@ const options = {
   key: fs.readFileSync("../../myprefix-client-key.pem"),
   cert: fs.readFileSync("../../myprefix-client-cert.pem")
 };
-
+app.use(cors());
 // Serve static files from the Vite build directory
 app.use(express.static(path.join(__dirname, '..', 'dist')));
 
