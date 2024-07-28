@@ -24,12 +24,7 @@ export const getData = async ():Promise<AxiosResponse<Data>> => {
         const query="q=computer"
         const url= `${baseUrl}${type}/?${query}&apiKey=${key}`
 
-        const response: Promise<AxiosResponse<Data>> = axios.get(url,{
-            headers: {
-                'Accept': 'application/json',
-                'Upgrade': 'websocket' // Uncomment if the API requires this header
-              }
-        });
+        const response: Promise<AxiosResponse<Data>> = axios.get(url);
         return response
     } catch (error) {
         console.error('Error fetching data:', error);
