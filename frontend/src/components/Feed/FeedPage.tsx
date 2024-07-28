@@ -31,11 +31,15 @@ function FeedPage() {
             setIsLoading(false);
           }
         }
-        fetchPosts();
-
-        
+        const timerId = setTimeout(() => {
+          fetchPosts();
+        }, 500);
+    
           return () => {
-// Prevent state update on destructed component
+            clearTimeout(timerId);
+            console.log("hello")
+            if(cancelRef.current)
+            cancelRef.current() // Prevent state update on destructed component
           };
 
   }, []); // Include cancelToken in dependencies to handle cleanup correctly
