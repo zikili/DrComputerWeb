@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, CanceledError } from "axios";
+import axios, { AxiosError, AxiosResponse, CanceledError } from "axios";
 import { Article, Data, getData } from "../../services/news-service";
 import "./ArticlePage.css"
 import { useEffect, useState } from "react";
@@ -12,11 +12,12 @@ function ArticlePage() {
           
           setIsLoading(true);
              getData().then(async (res)=>{
-              const response: AxiosResponse<Data>=  res;
+              const response: AxiosResponse<Data>|AxiosError=  res;
               console.log(response.status)
-              if(response.status!==200)
+              if(axios.isAxiosError(response))
                 setError("Couldn't fetch posts")
-              setArticles(response.data.articles)
+              else{
+              setArticles(response.data.articles)}
             });
         } catch (error) {
           
