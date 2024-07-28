@@ -35,9 +35,7 @@ function FeedPage() {
 
         
           return () => {
-            console.log("hello")
-            if(cancelRef.current)
-            cancelRef.current() // Prevent state update on destructed component
+// Prevent state update on destructed component
           };
 
   }, []); // Include cancelToken in dependencies to handle cleanup correctly
