@@ -54,7 +54,7 @@ function MyPostsPage() {
 
   return (
     <div className="my-posts-page">
-      <h1>My Posts</h1>
+      <h1 className="h1">My Posts</h1>
       <div className="posts-list">
         {posts?.length === 0 ? (
           <div className="no-posts"><h3>No posts have been uploaded.</h3></div>

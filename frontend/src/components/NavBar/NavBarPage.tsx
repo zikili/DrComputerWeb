@@ -10,7 +10,7 @@ const NavBar = () => {
   const [error, setError] = useState<string>();
   
    const logoutFunction = async () => {
-    const userService:UserService = new UserService();
+    const userService: UserService = new UserService();
     await userService.logoutUser()
       .then(() => {
         setIsLoading(false);
