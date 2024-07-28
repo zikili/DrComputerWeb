@@ -28,7 +28,7 @@ export class HttpService<T extends BaseEntity>{
       }
        catch (error) {
         if(error instanceof CanceledError)
-            throw error
+            throw error.message
         if(error instanceof DOMException && error.name === 'AbortError')
           console.log('User Aborted');
           throw "error in getAll at HttpService"

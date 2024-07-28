@@ -23,7 +23,7 @@ init().then((app) => {
   const specs = swaggerJsDoc(options);
   app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
   if (process.env.NODE_ENV !== "production") {
-    console.log("DEVELOPMENT");
+    console.log("DEVELOPMENT"+process.env.PORT);
     http.createServer(app).listen(process.env.PORT);
   } else {
     console.log("PRODUCTION");

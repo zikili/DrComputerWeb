@@ -9,7 +9,7 @@
     "testAuth": "tsc && jest --detectOpenHandles --forceExit ./src/tests/auth.test.ts",
     "lint": "eslint . --ext .ts",
     "dev": "nodemon ./src/Server.ts",
-    "prod": "tsc -p tsconfig_prod.json && node ./dist/src/Server.js",
+    "prod": "cp .envprod .env && tsc -p tsconfig_prod.json && pm2 restart ecosystem.config.js --env production",
     "prod1": "cp .envprod .env && tsc -p tsconfig_prod.json && node ./dist/src/Server.js"
   },
   "author": "Menachi",

@@ -6,7 +6,7 @@ import UserService, { IProfile } from "../../services/user-service";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { uploadPhoto } from "../../services/file-service";
-
+import avatar from '/assets/avatar.jpg';
 function EditProfilePage() {
   const [imgSrc, setImgSrc] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -87,7 +87,7 @@ function EditProfilePage() {
     setImgSrc(null);
     setProfile(prevProfile => ({
       ...prevProfile,
-      image: "..//src/assets/avatar.jpg"
+      image: avatar
     }));
   }
   return (

@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 
 export interface Article{
@@ -16,18 +16,18 @@ export interface Data {
     totalResults: number,
     articles: Article[]
 }
-export const getData = async ():Promise<AxiosResponse<Data>> => {
+export const getData =  async ():Promise<AxiosResponse<Data> | AxiosError> => {
     try {
         const baseUrl='https://newsapi.org/v2/'
         const key=import.meta.env.VITE_NEWS_API_KEY
         const type="everything"
         const query="q=computer"
         const url= `${baseUrl}${type}/?${query}&apiKey=${key}`
-
-        const response: Promise<AxiosResponse<Data>> = axios.get(url);
+        const response: AxiosResponse<Data> =await axios.get(url);
         return response
     } catch (error) {
-        console.error('Error fetching data:', error);
-        throw error;
+        if(axios.isAxiosError(error))
+            return error
     }
+    return new AxiosError()
 };

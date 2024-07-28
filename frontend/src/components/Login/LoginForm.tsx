@@ -7,6 +7,7 @@ import UserService, { IloginUser } from "../../services/user-service";
 import { CanceledError } from "axios";
 import { useNavigate } from 'react-router-dom';
 import {GoogleLogin, CredentialResponse } from '@react-oauth/google';
+import logoimp from '/assets/logo.png';
 
 const schema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -16,7 +17,8 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 function LoginForm() {
-  const logo="/src/assets/logo.png"
+  console.log("in login")
+  const logo=logoimp
   const navigate = useNavigate();
   console.log("LoginForm");
   const {
