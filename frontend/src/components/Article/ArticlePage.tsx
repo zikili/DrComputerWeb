@@ -1,43 +1,37 @@
-import axios, { AxiosError, AxiosResponse, CanceledError } from "axios";
-import { Article, Data, getData } from "../../services/news-service";
-import "./ArticlePage.css"
+import axios from "axios";
 import { useEffect, useState } from "react";
+import { NewsArticle, searchNews } from "../../services/bing-news-service";
+import "./ArticlePage.css";
 
 function ArticlePage() {
-    const [isLoading,setIsLoading]=useState(false)
-    const [error, setError] = useState<string|null>(null);
-    const [articles,setArticles]=useState<Article[]>([])
-    useEffect(() => {
-        try {
-          
-          setIsLoading(true);
-             getData().then(async (res)=>{
-              const response: AxiosResponse<Data>|AxiosError=  res;
-              console.log(response.status)
-              if(axios.isAxiosError(response))
-                setError("Couldn't fetch articles")
-              else
-              setArticles(response.data.articles)
-            });
-        } catch (error) {
-          
-            if (axios.isCancel(error)||error instanceof CanceledError ) {
-              setIsLoading(false);
-              return 
-            }
-            else {
-              setError("Error fetching posts")
-                console.error('Error fetching articles:', error);
-            }
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [articles, setArticles] = useState<NewsArticle[]>([]);
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        setIsLoading(true);
+        const response = await searchNews("latest tech news"); // Pass a query string here
+        setArticles(response.value); // Use response.value to set articles
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          setError("Couldn't fetch articles");
+        } else {
+          setError("Error fetching articles");
         }
-        finally {
-          setIsLoading(false);
-        }
+        console.error("Error fetching articles:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchArticles();
   }, []);
 
-    function handlePostClick(url: string): void {
-        window.open(url, '_blank');
-    }
+  function handlePostClick(url: string): void {
+    window.open(url, "_blank");
+  }
 
   return (
     <div className="news-page">
@@ -46,22 +40,29 @@ function ArticlePage() {
         <div className="spinner-border text-primary" />
       ) : error ? (
         <div className="alert alert-danger">{error}</div>
-      ) : articles?.length === 0 ? (
-        <div className="no-articles"><h3>No posts have been uploaded.</h3></div>
+      ) : articles.length === 0 ? (
+        <div className="no-articles">
+          <h3>No articles available.</h3>
+        </div>
       ) : (
-        
         <div className="articles-list">
           {articles.map((article, index) => (
-            <div key={index} className="article-item" onClick={() => handlePostClick(article.url)}>
-              <h2>{article.title}</h2>
-              <p>Author: {article.author}</p>
+            <div
+              key={index}
+              className="article-item"
+              onClick={() => handlePostClick(article.url)}
+            >
+              <h2>{article.name}</h2>
               <p>{article.description}</p>
-              {article.urlToImage && (<img src={article.urlToImage} alt="Article Image" />)}
+              {article.image?.thumbnail?.contentUrl && (
+                <img src={article.image.thumbnail.contentUrl} alt="Article" />
+              )}
             </div>
           ))}
-          </div>
+        </div>
       )}
     </div>
   );
 }
-  export default ArticlePage
+
+export default ArticlePage;
