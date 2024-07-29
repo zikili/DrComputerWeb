@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
 
-export interface Article{
+export interface New{
     source: string,
     author?: string,
     title: string,
@@ -14,16 +14,17 @@ export interface Article{
 export interface Data {
     status: string,
     totalResults: number,
-    articles: Article[]
+    News: New[]
 }
 export const getData =  async ():Promise<AxiosResponse<Data> | AxiosError> => {
     try {
-        const baseUrl='https://newsapi.org/v2/'
         const key=import.meta.env.VITE_NEWS_API_KEY
-        const type="everything"
+        const baseUrl='https://newsapi.in/newsapi/news.php?key='+key
+        const content_type="full_content"
         const query="q=computer"
-        const url= `${baseUrl}${type}/?${query}&apiKey=${key}`
-        const response: AxiosResponse<Data> =await axios.get(url);
+        const url= `${baseUrl}&content_type=${content_type}&${query}&lang=english`
+        const response: AxiosResponse<Data> =await axios.get("https://newsapi.in/newsapi/news.php?key=Lwgb4IDM18TeXfLliRxW7LikpD1NTP&category=hindi_state");
+        console.log(response)
         return response
     } catch (error) {
         if(axios.isAxiosError(error))
