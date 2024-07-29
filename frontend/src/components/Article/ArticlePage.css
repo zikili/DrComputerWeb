@@ -75,3 +75,26 @@
   margin-top: 10px;
   color: #666;
 }
+
+.load-more-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 20px auto;
+  background-color: #007bff; /* Bootstrap primary color */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+.load-more-button:hover {
+  background-color: #0056b3; /* Darker shade for hover effect */
+}
+
+.load-more-button:disabled {
+  background-color: #cccccc; /* Light grey for disabled state */
+  cursor: not-allowed;
+}

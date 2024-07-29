@@ -17,20 +17,21 @@ export interface NewsResponse {
   value: NewsArticle[];
 }
 
-export async function searchNews(query: string): Promise<NewsResponse> {
-  try {
-    const response = await axios.get(ENDPOINT, {
-      headers: {
-        "Ocp-Apim-Subscription-Key": API_KEY,
-      },
-      params: {
-        q: query,
-        count: 10,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching news:", error);
-    throw error;
+export async function searchNews(query: string, offset: number = 0): Promise<NewsResponse> {
+    try {
+      const response = await axios.get(ENDPOINT, {
+        headers: {
+          'Ocp-Apim-Subscription-Key': API_KEY,
+        },
+        params: {
+          q: query,
+          count: 10,
+          offset, // Add offset or page parameter here
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching news:', error);
+      throw error;
+    }
   }
-}

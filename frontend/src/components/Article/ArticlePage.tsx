@@ -1,42 +1,74 @@
+// components/ArticlePage.tsx
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { NewsArticle, searchNews } from "../../services/bing-news-service";
 import "./ArticlePage.css";
+
+const RETRY_DELAY = 3000; // Delay in milliseconds (3 seconds)
+const MAX_RETRIES = 3;
 
 function ArticlePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [articles, setArticles] = useState<NewsArticle[]>([]);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
 
-  useEffect(() => {
-    const fetchArticles = async () => {
+  // Function to fetch articles
+  const fetchArticles = useCallback(
+    async (retries: number = 0) => {
+      if (!hasMore || isLoading) return;
+
+      setIsLoading(true);
       try {
-        setIsLoading(true);
-        const response = await searchNews("latest tech news"); // Pass a query string here
-        setArticles(response.value); // Use response.value to set articles
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          setError("Couldn't fetch articles");
+        const response = await searchNews("latest tech news", offset);
+        const newArticles = response.value.filter(
+          (article) => !articles.some((a) => a.url === article.url)
+        );
+
+        if (newArticles.length === 0) {
+          setHasMore(false);
         } else {
-          setError("Error fetching articles");
+          setArticles((prev) => [...prev, ...newArticles]);
+          setOffset((prev) => prev + 10); // Adjust the offset based on your API response
         }
-        console.error("Error fetching articles:", error);
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response?.status === 429) {
+          if (retries < MAX_RETRIES) {
+            // Retry after a delay
+            setTimeout(() => fetchArticles(retries + 1), RETRY_DELAY);
+          } else {
+            setError("Rate limit exceeded. Please try again later.");
+          }
+        } else {
+          if (axios.isAxiosError(error)) {
+            setError("Couldn't fetch articles");
+          } else {
+            setError("Error fetching articles");
+          }
+          console.error("Error fetching articles:", error);
+        }
       } finally {
         setIsLoading(false);
       }
-    };
+    },
+    [offset, hasMore, isLoading, articles]
+  );
 
+  // Automatically fetch the initial set of articles when component mounts
+  useEffect(() => {
     fetchArticles();
   }, []);
 
-  function handlePostClick(url: string): void {
-    window.open(url, "_blank");
-  }
+  // Handle load more button click
+  const handleLoadMore = () => {
+    fetchArticles();
+  };
 
   return (
     <div className="news-page">
       <h1>All news</h1>
-      {isLoading ? (
+      {isLoading && articles.length === 0 ? (
         <div className="spinner-border text-primary" />
       ) : error ? (
         <div className="alert alert-danger">{error}</div>
@@ -50,7 +82,7 @@ function ArticlePage() {
             <div
               key={index}
               className="article-item"
-              onClick={() => handlePostClick(article.url)}
+              onClick={() => window.open(article.url, "_blank")}
             >
               <h2>{article.name}</h2>
               <p>{article.description}</p>
@@ -60,6 +92,15 @@ function ArticlePage() {
             </div>
           ))}
         </div>
+      )}
+      {hasMore && (
+        <button
+          className="load-more-button"
+          onClick={handleLoadMore}
+          disabled={isLoading}
+        >
+          {isLoading ? "Loading..." : "Load More"}
+        </button>
       )}
     </div>
   );
