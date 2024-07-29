@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "This is the REST api",
   "main": "index.js",
+  
   "scripts": {
     "test": "tsc && jest --detectOpenHandles --forceExit --coverage",
     "start": "tsc && node dist/src/Server.js",

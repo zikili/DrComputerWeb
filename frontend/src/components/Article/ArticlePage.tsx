@@ -1,23 +1,23 @@
 import axios, { AxiosError, AxiosResponse, CanceledError } from "axios";
-import { New, Data, getData } from "../../services/news-service";
+import { Article, Data, getData } from "../../services/news-service";
 import "./ArticlePage.css"
 import { useEffect, useState } from "react";
 
 function ArticlePage() {
     const [isLoading,setIsLoading]=useState(false)
     const [error, setError] = useState<string|null>(null);
-    const [articles,setArticles]=useState<New[]>([])
+    const [articles,setArticles]=useState<Article[]>([])
     useEffect(() => {
         try {
           
           setIsLoading(true);
              getData().then(async (res)=>{
               const response: AxiosResponse<Data>|AxiosError=  res;
-              console.log(response)
+              console.log(response.status)
               if(axios.isAxiosError(response))
                 setError("Couldn't fetch articles")
               else
-              setArticles(response.data.News)
+              setArticles(response.data.articles)
             });
         } catch (error) {
           
@@ -65,6 +65,3 @@ function ArticlePage() {
   );
 }
   export default ArticlePage
-
-
-

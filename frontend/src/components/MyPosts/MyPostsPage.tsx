@@ -8,18 +8,22 @@ function MyPostsPage() {
   
   const navigate = useNavigate();
   const cancelRef = useRef<(() => void | undefined) | undefined>();
-
+  const [isLoading, setIsLoading] = useState(false);
   const [posts, setPosts] = useState<IPost[] | null>(null); // Type assertion here
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        setIsLoading(true)
         const res = await PostService.getAll("/getMyPosts");
         cancelRef.current = await res.cancel;
         const response: AxiosResponse<IPost[]> = await res.req;
         setPosts(response.data);
       } catch (error) {
         console.error("Error fetching posts:", error);
+      }
+      finally{
+        setIsLoading(false)
       }
     };
 
@@ -53,10 +57,14 @@ function MyPostsPage() {
   };
 
   return (
+    <div className="page-container">
     <div className="my-posts-page">
       <h1>My Posts</h1>
       <div className="posts-list">
-        {posts?.length === 0 ? (
+      {isLoading ? (
+        <div className="spinner-border text-primary" />
+      ):
+        posts?.length === 0 ? (
           <div className="no-posts"><h3>No posts have been uploaded.</h3></div>
         ) : (
           posts?.map((post) => (
@@ -86,6 +94,7 @@ function MyPostsPage() {
           ))
         )}
       </div>
+    </div>
     </div>
   );
 }
